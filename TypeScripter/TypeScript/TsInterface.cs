@@ -9,16 +9,16 @@ namespace TypeScripter.TypeScript
 	public sealed class TsInterface : TsType
 	{
 		#region Properties
-		public List<TsProperty> Properties
+		public IList<TsProperty> Properties
 		{
 			get;
 			private set;
 		}
 
-		public List<TsFunction> Functions
+		public IList<TsFunction> Functions
 		{
 			get;
-			set;
+			private set;
 		}
 		#endregion
 
@@ -27,37 +27,11 @@ namespace TypeScripter.TypeScript
 		/// Constructor
 		/// </summary>
 		/// <param name="name">The interface name</param>
-		public TsInterface(string name)
+		public TsInterface(TsName name)
 			: base(name)
 		{
 			this.Properties = new List<TsProperty>();
 			this.Functions = new List<TsFunction>();
-		}
-		#endregion
-
-		#region Methods
-		public override string ToString()
-		{
-			var str = new StringBuilder();
-			str.AppendFormat("interface {0} {{", this.Name);
-			str.AppendLine();
-
-			foreach (var property in Properties)
-			{
-				str.Append(property.ToString());
-				str.Append(";");
-				str.AppendLine();
-			}
-
-			foreach (var function in Functions)
-			{
-				str.Append(function.ToString());
-				str.Append(";");
-				str.AppendLine();
-			}
-
-			str.AppendLine("}");
-			return str.ToString();
 		}
 		#endregion
 	}

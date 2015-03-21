@@ -14,6 +14,7 @@ namespace TypeScripter.TypeScript
 			get;
 			set;
 		}
+
 		public TsType Type
 		{
 			get;
@@ -26,18 +27,11 @@ namespace TypeScripter.TypeScript
 		/// Constructor
 		/// </summary>
 		/// <param name="name">The interface name</param>
-		public TsProperty(string name, TsType type)
+		public TsProperty(TsName name, TsType type)
 			: base(name)
 		{
 			this.Type = type;
 			this.Optional = false;
-		}
-		#endregion
-
-		#region Methods
-		public override string ToString()
-		{
-			return string.Format("{0}: {1}", this.Name, this.Type.Name);
 		}
 		#endregion
 	}

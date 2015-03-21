@@ -10,7 +10,7 @@ namespace TypeScripter.TypeScript
 	{
 		#region Creation
 		public TsArray(TsType elementType, int dimensions)
-			: base(elementType.Name + GenerateArrayNotation(dimensions))
+			: base(new TsName(elementType.Name.Name + GenerateArrayNotation(dimensions), elementType.Name.Namespace))
 		{
 		}
 		#endregion

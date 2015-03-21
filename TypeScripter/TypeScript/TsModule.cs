@@ -12,7 +12,7 @@ namespace TypeScripter.TypeScript
 	public class TsModule : TsObject
 	{
 		#region Properties
-		public List<TsType> Types
+		public IList<TsType> Types
 		{
 			get;
 			private set;
@@ -24,29 +24,10 @@ namespace TypeScripter.TypeScript
 		/// Constructor
 		/// </summary>
 		/// <param name="name">The name of the module</param>
-		public TsModule(string name)
+		public TsModule(TsName name, IEnumerable<TsType> types = null)
 			: base(name)
 		{
-			this.Types = new List<TsType>();
-		}
-		#endregion
-
-		#region Methods
-		public override string ToString()
-		{
-			var str = new StringBuilder();
-			str.AppendFormat("declare module {0} {{", this.Name);
-			str.AppendLine();
-
-			foreach (var type in Types)
-			{
-				str.Append(type.ToString());
-				str.AppendLine();
-			}
-
-			str.Append("}");
-			str.AppendLine();
-			return str.ToString();
+			this.Types = types != null? new List<TsType>(types) : new List<TsType>();
 		}
 		#endregion
 	}

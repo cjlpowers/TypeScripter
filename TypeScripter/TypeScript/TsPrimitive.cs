@@ -10,15 +10,15 @@ namespace TypeScripter.TypeScript
 	public class TsPrimitive : TsType
 	{
 		#region Primitive Definitions
-		public static readonly TsPrimitive Any = new TsPrimitive("any");
-		public static readonly TsPrimitive Void = new TsPrimitive("void");
-		public static readonly TsPrimitive Boolean = new TsPrimitive("boolean");
-		public static readonly TsPrimitive Number = new TsPrimitive("number");
-		public static readonly TsPrimitive String = new TsPrimitive("string");
+		public static readonly TsPrimitive Any = new TsPrimitive(new TsName("any"));
+		public static readonly TsPrimitive Void = new TsPrimitive(new TsName("void"));
+		public static readonly TsPrimitive Boolean = new TsPrimitive(new TsName("boolean"));
+		public static readonly TsPrimitive Number = new TsPrimitive(new TsName("number"));
+		public static readonly TsPrimitive String = new TsPrimitive(new TsName("string"));
 		#endregion
 
 		#region Creation
-		protected TsPrimitive(string name)
+		protected TsPrimitive(TsName name)
 			: base(name)
 		{
 		}

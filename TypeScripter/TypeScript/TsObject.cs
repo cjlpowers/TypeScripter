@@ -13,7 +13,7 @@ namespace TypeScripter.TypeScript
 	public abstract class TsObject
 	{
 		#region Properties
-		public string Name
+		public TsName Name
 		{
 			get;
 			private set;
@@ -25,7 +25,7 @@ namespace TypeScripter.TypeScript
 		/// Constructor
 		/// </summary>
 		/// <param name="name">The name of the object</param>
-		protected TsObject(string name)
+		protected TsObject(TsName name)
 		{
 			this.Name = name;
 		}

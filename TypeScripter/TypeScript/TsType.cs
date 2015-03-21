@@ -16,7 +16,7 @@ namespace TypeScripter.TypeScript
 		/// Constructor
 		/// </summary>
 		/// <param name="name">The name of the type</param>
-		protected TsType(string name)
+		protected TsType(TsName name)
 			: base(name)
 		{
 		}
@@ -25,7 +25,7 @@ namespace TypeScripter.TypeScript
 		#region Method
 		public override string ToString()
 		{
-			return this.Name;
+			return this.Name.FullName;
 		}
 		#endregion
 	}

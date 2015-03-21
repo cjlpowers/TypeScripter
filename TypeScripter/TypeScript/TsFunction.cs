@@ -12,10 +12,10 @@ namespace TypeScripter.TypeScript
 		public TsType ReturnType
 		{
 			get;
-			private set;
+			set;
 		}
 
-		public IEnumerable<TsArgument> Arguments
+		public IList<TsParameter> Parameters
 		{
 			get;
 			private set;
@@ -27,27 +27,11 @@ namespace TypeScripter.TypeScript
 		/// Constructor
 		/// </summary>
 		/// <param name="name">The argument name</param>
-		public TsFunction(string name, TsType returnType, IEnumerable<TsArgument> arguments)
+		public TsFunction(TsName name)
 			: base(name)
 		{
-			this.ReturnType = returnType;
-			this.Arguments = arguments;
-		}
-		#endregion
-
-		#region Methods
-		public override string ToString()
-		{
-			var str = new StringBuilder();
-			str.AppendFormat("{0}", this.Name);
-			str.Append("(");
-			str.Append(string.Join(", ", this.Arguments.Select(x => x.ToString())));
-			str.Append(")");
-
-			if (this.ReturnType != TsPrimitive.Any)
-				str.AppendFormat(" :{0}", this.ReturnType.Name);
-
-			return str.ToString();
+			this.ReturnType = TsPrimitive.Void;
+			this.Parameters = new List<TsParameter>();
 		}
 		#endregion
 	}
