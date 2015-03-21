@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.22609.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TypeScripter", "TypeScripter.csproj", "{23816576-843A-4424-B502-8546A1D4EF62}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TypeScripter.Tests", "..\TypeScripter.Tests\TypeScripter.Tests.csproj", "{EAA005D3-AADA-49E1-B45E-A7F99EA80DBB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{7371EB1B-87AD-473F-B387-5E86D10E4261}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{23816576-843A-4424-B502-8546A1D4EF62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23816576-843A-4424-B502-8546A1D4EF62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23816576-843A-4424-B502-8546A1D4EF62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23816576-843A-4424-B502-8546A1D4EF62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAA005D3-AADA-49E1-B45E-A7F99EA80DBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAA005D3-AADA-49E1-B45E-A7F99EA80DBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAA005D3-AADA-49E1-B45E-A7F99EA80DBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAA005D3-AADA-49E1-B45E-A7F99EA80DBB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
