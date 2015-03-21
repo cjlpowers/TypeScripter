@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
   <head>
     <meta charset='utf-8'>
@@ -18,7 +18,7 @@
       <div class="inner">
 
         <header>
-          <h1>Typescripter</h1>
+          <h1>TypeScripter</h1>
           <h2>A class library for generating TypeScript definition files from .NET assemblies and types</h2>
         </header>
 
@@ -36,9 +36,10 @@
 
 <p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
+<pre><code>var output = scripter
+.WithTypeReader(new TestTypeReader())
+.AddTypes(assembly)
+.ToString();
 </code></pre>
 
 <p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
