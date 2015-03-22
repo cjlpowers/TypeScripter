@@ -6,8 +6,8 @@ declare module TypeScripter {
 		AddTypes(types: any) :TypeScripter.Scripter;
 		AddTypes(assembly: any) :TypeScripter.Scripter;
 		AddTypes(assemblies: any) :TypeScripter.Scripter;
-		FromAssembly(assembly: any) :TypeScripter.Scripter;
-		FromAssemblies(assemblies: any) :TypeScripter.Scripter;
+		UsingAssembly(assembly: any) :TypeScripter.Scripter;
+		UsingAssemblies(assemblies: any) :TypeScripter.Scripter;
 		UsingAssemblyFilter(filter: any) :TypeScripter.Scripter;
 		UsingTypeFilter(filter: any) :TypeScripter.Scripter;
 		Modules();

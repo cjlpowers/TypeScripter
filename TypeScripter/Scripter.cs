@@ -115,20 +115,20 @@ namespace TypeScripter
 			if (assemblies == null)
 				throw new ArgumentNullException("assemblies");
 
-			this.FromAssemblies(assemblies);
+			this.UsingAssemblies(assemblies);
 			foreach (var assembly in assemblies)
 				AddTypes(this.Reader.GetTypes(assembly));
 			return this;
 		}
 
-		public Scripter FromAssembly(Assembly assembly)
+		public Scripter UsingAssembly(Assembly assembly)
 		{
 			if (assembly == null)
 				throw new ArgumentNullException("assembly");
-			return this.FromAssemblies(new[] { assembly });
+			return this.UsingAssemblies(new[] { assembly });
 		}
 
-		public Scripter FromAssemblies(IEnumerable<Assembly> assemblies)
+		public Scripter UsingAssemblies(IEnumerable<Assembly> assemblies)
 		{
 			if (assemblies == null)
 				throw new ArgumentNullException("assemblies");
@@ -136,7 +136,6 @@ namespace TypeScripter
 			var assembliesLookup = new HashSet<Assembly>(assemblies);
 			return this.UsingAssemblyFilter(x => assembliesLookup.Contains(x));
 		}
-
 
 		public Scripter UsingAssemblyFilter(Func<Assembly, bool> filter)
 		{
