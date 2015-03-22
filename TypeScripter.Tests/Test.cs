@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 
 using TypeScripter.TypeScript;
+using TypeScripter.Readers;
 
 namespace TypeScripter.Tests
 {
@@ -46,13 +47,22 @@ namespace TypeScripter.Tests
 			var assembly = typeof(Scripter).Assembly;
 
 			var output = scripter
-				.WithTypeReader(new TestTypeReader())
 				.AddTypes(assembly)
 				.SaveToFile(string.Format(@"C:\Development\cjlpowers\TypeScripter\TypeScripter.Tests\Test\{0}.ts", assembly.GetName().Name));
-				//.SaveToDirectory(@"C:\Development\cjlpowers\TypeScripter\TypeScripter.Tests\Test");
 		}
 
-		private class TestTypeReader : TypeReader
+		[Test]
+		public void OutputTest()
+		{
+			var scripter = new TypeScripter.Scripter();
+			var output = scripter
+				.UsingTypeFilter(x => x == typeof(Exception))
+				.AddType(typeof(Exception))
+				.ToString();
+			Console.WriteLine(output);
+		}
+
+		private class TestTypeReader : DefaultTypeReader
 		{
 			public override IEnumerable<Type> GetTypes(Assembly assembly)
 			{
@@ -62,12 +72,12 @@ namespace TypeScripter.Tests
 
 		private class TestScripter : Scripter
 		{
-			protected override TsType GenerateType(Type type)
+			protected override TsType Resolve(Type type)
 			{
 				TsType tsType = null;
 				if (type.Namespace.StartsWith("System"))
 					tsType = TsPrimitive.Any;
-				tsType = base.GenerateType(type);
+				tsType = base.Resolve(type);
 				return tsType;
 			}
 		}

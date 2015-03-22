@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Reflection;
 
 using TypeScripter.TypeScript;
+using TypeScripter.Readers;
+using TypeScripter.Resolvers;
 
 namespace TypeScripter
 {
@@ -18,7 +20,26 @@ namespace TypeScripter
 			set;
 		}
 
-		private TypeReader Reader
+		private Func<Assembly, bool> AssemblyFilter
+		{
+			get;
+			set;
+		}
+
+		private Func<Type, bool> TypeFilter
+		{
+			get;
+			set;
+		}
+
+		private ITypeReader Reader
+		{
+			get;
+			set;
+		}
+
+
+		private ITypeResolver Resolver
 		{
 			get;
 			set;
@@ -36,9 +57,15 @@ namespace TypeScripter
 		{
 			this.TypeLookup = new Dictionary<Type, TsType>()
 			{
-				{ typeof(System.Object), TsPrimitive.Any }
+				{ typeof(void), TsPrimitive.Void },
+                { typeof(object), TsPrimitive.Any },
+                { typeof(string), TsPrimitive.String },
+				{ typeof(bool), TsPrimitive.Boolean },
+				{ typeof(int), TsPrimitive.Number },
+				{ typeof(float), TsPrimitive.Number },
 			};
-			this.Reader = new TypeReader();
+			this.Reader = new DefaultTypeReader();
+			this.Resolver = new DefaultTypeResolver();
 			this.Writer = new TsFormatter();
 		}
 		#endregion
@@ -51,8 +78,10 @@ namespace TypeScripter
 				str.Append(this.Writer.Format(module));
 			return str.ToString();
 		}
+		#endregion
 
-		public Scripter WithTypeReader(TypeReader reader)
+		#region Operations
+		public Scripter UsingTypeReader(ITypeReader reader)
 		{
 			if (reader == null)
 				throw new ArgumentNullException("reader");
@@ -62,7 +91,7 @@ namespace TypeScripter
 
 		public Scripter AddType(Type type)
 		{
-			GenerateType(type);
+			this.Resolve(type);
 			return this;
 		}
 
@@ -75,14 +104,77 @@ namespace TypeScripter
 
 		public Scripter AddTypes(Assembly assembly)
 		{
-			return AddTypes(this.Reader.GetTypes(assembly));
+			if (assembly == null)
+				throw new ArgumentNullException("assembly");
+
+			return AddTypes(new [] { assembly });
 		}
-		
-		protected virtual TsType GenerateType(Type type)
+
+		public Scripter AddTypes(IEnumerable<Assembly> assemblies)
+		{
+			if (assemblies == null)
+				throw new ArgumentNullException("assemblies");
+
+			this.UsingAssemblies(assemblies);
+			foreach (var assembly in assemblies)
+				AddTypes(this.Reader.GetTypes(assembly));
+			return this;
+		}
+
+		public Scripter UsingAssembly(Assembly assembly)
+		{
+			if (assembly == null)
+				throw new ArgumentNullException("assembly");
+			return this.UsingAssemblies(new[] { assembly });
+		}
+
+		public Scripter UsingAssemblies(IEnumerable<Assembly> assemblies)
+		{
+			if (assemblies == null)
+				throw new ArgumentNullException("assemblies");
+
+			var assembliesLookup = new HashSet<Assembly>(assemblies);
+			return this.UsingAssemblyFilter(x => assembliesLookup.Contains(x));
+		}
+
+		public Scripter UsingAssemblyFilter(Func<Assembly, bool> filter)
+		{
+			this.AssemblyFilter = filter;
+			return this;
+		}
+
+		public Scripter UsingTypeFilter(Func<Type, bool> filter)
+		{
+			this.TypeFilter = filter;
+			return this;
+		}
+		#endregion
+
+		#region Type Resolution
+		protected virtual TsType Resolve(Type type)
 		{
 			// see if we have already processed the type
 			TsType tsType;
 			if (this.TypeLookup.TryGetValue(type, out tsType))
+				return tsType;
+
+			// should this assembly be considered?
+			if (this.AssemblyFilter != null && !this.AssemblyFilter(type.Assembly))
+				return TsPrimitive.Any;
+
+			// should this assembly be considered?
+			if (this.TypeFilter != null && !this.TypeFilter(type))
+				return TsPrimitive.Any;
+
+			if (type.IsArray && type.HasElementType) 
+			{
+				var elementType = this.Resolve(type.GetElementType());
+				return new TsArray(elementType, type.GetArrayRank());
+			}
+
+			// resolve the type
+			tsType = this.Resolver.Resolve(type);
+			if (tsType != null)
 				return tsType;
 
 			if (type.IsGenericType)
@@ -90,28 +182,12 @@ namespace TypeScripter
 				// TODO
 				return TsPrimitive.Any;
 			}
-
-			if (type.IsPrimitive)
-			{
-				if (type == typeof(bool))
-					return TsPrimitive.Boolean;
-				else if (type == typeof(int) || type == typeof(float) || type == typeof(double))
-					return TsPrimitive.Number;
-				else if (type == typeof(string))
-					return TsPrimitive.String;
-				else if (type == typeof(void))
-					return TsPrimitive.Void;
-				else
-					return TsPrimitive.Any;
-			}
-			else if (type.FullName.StartsWith("System"))
-				return TsPrimitive.Any;
-			else if (type.IsClass)
+			else if (type.IsAnsiClass)
 				return GenerateInterface(type);
 			else if (type.IsInterface)
 				return GenerateInterface(type);
-			else
-				return TsPrimitive.Any;
+
+			return TsPrimitive.Any;
 		}
 		#endregion
 
@@ -123,16 +199,16 @@ namespace TypeScripter
 
 			// process properties
 			foreach (var property in this.Reader.GetProperties(type))
-				tsInterface.Properties.Add(new TsProperty(GetName(property), GenerateType(property.PropertyType)));
+				tsInterface.Properties.Add(new TsProperty(GetName(property), Resolve(property.PropertyType)));
 
 			// process methods
 			foreach (var method in this.Reader.GetMethods(type))
 			{
-				var returnType = GenerateType(method.ReturnType);
+				var returnType = Resolve(method.ReturnType);
 				var parameters = this.Reader.GetParameters(method);
 				var tsFunction = new TsFunction(GetName(method));
 				tsFunction.ReturnType = returnType;
-				foreach (var param in parameters.Select(x => new TsParameter(GetName(x), GenerateType(x.ParameterType))))
+				foreach (var param in parameters.Select(x => new TsParameter(GetName(x), Resolve(x.ParameterType))))
 					tsFunction.Parameters.Add(param);
 				tsInterface.Functions.Add(tsFunction);
 			}
@@ -166,9 +242,8 @@ namespace TypeScripter
 		}
 		#endregion
 
-		#region Savings
-
-		public Scripter WithFormatter(TsFormatter writer)
+		#region Output
+		public Scripter UsingFormatter(TsFormatter writer)
 		{
 			this.Writer = writer;
 			return this;

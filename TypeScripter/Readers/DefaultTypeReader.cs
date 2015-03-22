@@ -7,21 +7,15 @@ using System.Threading.Tasks;
 
 using TypeScripter.TypeScript;
 
-namespace TypeScripter
+namespace TypeScripter.Readers
 {
-	public class TypeReader
+	public class DefaultTypeReader : ITypeReader
 	{
-		#region Creation
-		public TypeReader()
-		{
-		}
-		#endregion
-
-		#region Methods
+		#region ITypeReader
 		public virtual IEnumerable<Type> GetTypes(Assembly assembly)
 		{
 			return assembly.GetTypes()
-				.Where(x=>x.IsPublic)
+				.Where(x => x.IsPublic)
 				.Where(x => !x.IsGenericType);
 		}
 
