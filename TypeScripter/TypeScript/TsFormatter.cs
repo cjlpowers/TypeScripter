@@ -165,11 +165,16 @@ namespace TypeScripter.TypeScript
 				this.Write("{0}({1}){2};",
 					Format(function.Name),
 					string.Join(", ", function.Parameters.Select(x => Format(x))),
-					function.ReturnType == TsPrimitive.Any ? string.Empty : string.Format(" :{0}", function.ReturnType.Name.FullName)
+					function.ReturnType == TsPrimitive.Any ? string.Empty : string.Format(" :{0}", FormatFunctionReturn(function.ReturnType))
 				);
 				this.WriteNewline();
 				return sbc.ToString();
 			}
+		}
+
+		public virtual string FormatFunctionReturn(TsType returnType)
+		{
+			return returnType.Name.FullName;
 		}
 
 		public virtual string Format(TsEnum tsEnum)
