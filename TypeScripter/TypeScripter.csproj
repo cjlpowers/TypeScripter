@@ -44,8 +44,6 @@
     <Compile Include="Readers\CompositeTypeReader.cs" />
     <Compile Include="Readers\ServiceContractTypeReader.cs" />
     <Compile Include="Readers\DataContractTypeReader.cs" />
-    <Compile Include="Resolvers\DefaultTypeResolver.cs" />
-    <Compile Include="Resolvers\ITypeResolver.cs" />
     <Compile Include="Readers\DefaultTypeReader.cs" />
     <Compile Include="Readers\ITypeReader.cs" />
     <Compile Include="Scripter.cs" />

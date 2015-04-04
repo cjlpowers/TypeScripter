@@ -7,7 +7,6 @@ using System.Reflection;
 
 using TypeScripter.TypeScript;
 using TypeScripter.Readers;
-using TypeScripter.Resolvers;
 
 namespace TypeScripter
 {
@@ -38,13 +37,6 @@ namespace TypeScripter
 			set;
 		}
 
-
-		private ITypeResolver Resolver
-		{
-			get;
-			set;
-		}
-
 		private TsFormatter Writer
 		{
 			get;
@@ -65,7 +57,6 @@ namespace TypeScripter
 				{ typeof(float), TsPrimitive.Number },
 			};
 			this.Reader = new DefaultTypeReader();
-			this.Resolver = new DefaultTypeResolver();
 			this.Writer = new TsFormatter();
 		}
 		#endregion
