@@ -48,7 +48,9 @@
     <Compile Include="Readers\ITypeReader.cs" />
     <Compile Include="Scripter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TypeScript\TsGenericType.cs" />
     <Compile Include="TypeScript\TsFunction.cs" />
+    <Compile Include="TypeScript\TsTypeParameter.cs" />
     <Compile Include="TypeScript\TsParameter.cs" />
     <Compile Include="TypeScript\TsName.cs" />
     <Compile Include="TypeScript\TsFormatter.cs" />

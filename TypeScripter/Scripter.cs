@@ -45,6 +45,9 @@ namespace TypeScripter
 		#endregion
 
 		#region Creation
+		/// <summary>
+		/// Constructor
+		/// </summary>
 		public Scripter()
 		{
 			this.TypeLookup = new Dictionary<Type, TsType>()
@@ -53,8 +56,12 @@ namespace TypeScripter
                 { typeof(object), TsPrimitive.Any },
                 { typeof(string), TsPrimitive.String },
 				{ typeof(bool), TsPrimitive.Boolean },
+				{ typeof(byte), TsPrimitive.Number },
+				{ typeof(short), TsPrimitive.Number },
 				{ typeof(int), TsPrimitive.Number },
+				{ typeof(long), TsPrimitive.Number },
 				{ typeof(float), TsPrimitive.Number },
+				{ typeof(double), TsPrimitive.Number },
 			};
 			this.Reader = new DefaultTypeReader();
 			this.Writer = new TsFormatter();
@@ -62,6 +69,10 @@ namespace TypeScripter
 		#endregion
 
 		#region Methods
+		/// <summary>
+		/// Gets the current scripter output
+		/// </summary>
+		/// <returns>The scripter output</returns>
 		public override string ToString()
 		{
 			var str = new StringBuilder();
@@ -86,6 +97,11 @@ namespace TypeScripter
 			return this;
 		}
 
+		/// <summary>
+		/// Adds a set of types to the scripter.
+		/// </summary>
+		/// <param name="types">The types to add</param>
+		/// <returns>The scripter</returns>
 		public Scripter AddTypes(IEnumerable<Type> types)
 		{
 			foreach (var type in types)
@@ -93,6 +109,11 @@ namespace TypeScripter
 			return this;
 		}
 
+		/// <summary>
+		/// Adds all types from a particular assembly to the scripter.
+		/// </summary>
+		/// <param name="assembly">The assembly</param>
+		/// <returns>The scripter</returns>
 		public Scripter AddTypes(Assembly assembly)
 		{
 			if (assembly == null)
@@ -101,17 +122,27 @@ namespace TypeScripter
 			return AddTypes(new [] { assembly });
 		}
 
+		/// <summary>
+		/// Adds all types from a set of assemblies to the scripter.
+		/// </summary>
+		/// <param name="assemblies">The assemblies</param>
+		/// <returns>The scripter</returns>
 		public Scripter AddTypes(IEnumerable<Assembly> assemblies)
 		{
 			if (assemblies == null)
 				throw new ArgumentNullException("assemblies");
 
-			this.UsingAssemblies(assemblies);
 			foreach (var assembly in assemblies)
 				AddTypes(this.Reader.GetTypes(assembly));
 			return this;
 		}
 
+		/// <summary>
+		/// Limits the resolution of types ot the specified assembly.
+		/// All types outside of the assembly will be treated as type "any".
+		/// </summary>
+		/// <param name="assembly">The assembly</param>
+		/// <returns>The scripter</returns>
 		public Scripter UsingAssembly(Assembly assembly)
 		{
 			if (assembly == null)
@@ -119,6 +150,12 @@ namespace TypeScripter
 			return this.UsingAssemblies(new[] { assembly });
 		}
 
+		/// <summary>
+		/// Limits the resolution of types to the specified assemblies.
+		/// All types outside of the assemblies will be treated as type "any".
+		/// </summary>
+		/// <param name="assemblies">The assemblies</param>
+		/// <returns>The scripter</returns>
 		public Scripter UsingAssemblies(IEnumerable<Assembly> assemblies)
 		{
 			if (assemblies == null)
@@ -128,12 +165,24 @@ namespace TypeScripter
 			return this.UsingAssemblyFilter(x => assembliesLookup.Contains(x));
 		}
 
+		/// <summary>
+		/// Limits the resolution of types to a particular set of assemblies.
+		/// All types outside of the the filtered assemblies will be treated as type "any".
+		/// </summary>
+		/// <param name="filter">The assembly filter</param>
+		/// <returns>The scripter</returns>
 		public Scripter UsingAssemblyFilter(Func<Assembly, bool> filter)
 		{
 			this.AssemblyFilter = filter;
 			return this;
 		}
 
+		/// <summary>
+		/// Limits the resolution of types.
+		/// Not matching types will be treated as type "any".
+		/// </summary>
+		/// <param name="filter">The type filter</param>
+		/// <returns>The scripter</returns>
 		public Scripter UsingTypeFilter(Func<Type, bool> filter)
 		{
 			this.TypeFilter = filter;
@@ -157,28 +206,37 @@ namespace TypeScripter
 			if (this.TypeFilter != null && !this.TypeFilter(type))
 				return TsPrimitive.Any;
 
-			if (type.IsArray && type.HasElementType) 
+			if (type.IsGenericParameter)
+				return new TsGenericType(new TsName(type.Name));
+			else if (type.IsGenericType && !type.IsGenericTypeDefinition)
+			{
+				var tsGenericTypeDefinition = Resolve(type.GetGenericTypeDefinition());
+				var tsGenericType = new TsGenericType(tsGenericTypeDefinition.Name);
+				foreach (var argument in type.GetGenericArguments())
+				{
+					var tsArgType = this.Resolve(argument);
+					tsGenericType.TypeArguments.Add(tsArgType);
+                }
+				return tsGenericType;
+			}
+			else if (type.IsArray && type.HasElementType)
 			{
 				var elementType = this.Resolve(type.GetElementType());
 				return new TsArray(elementType, type.GetArrayRank());
 			}
-
-			// resolve the type
-			tsType = this.Resolver.Resolve(type);
-			if (tsType != null)
-				return tsType;
-
-			if (type.IsGenericType)
-			{
-				// TODO
-				return TsPrimitive.Any;
-			}
+			else if (type.IsEnum)
+				tsType = GenerateEnum(type);
 			else if (type.IsAnsiClass)
-				return GenerateInterface(type);
+				tsType = GenerateInterface(type);
 			else if (type.IsInterface)
-				return GenerateInterface(type);
+				tsType = GenerateInterface(type);
+			else
+				tsType = TsPrimitive.Any;
 
-			return TsPrimitive.Any;
+			// add the lookup
+			if (!this.TypeLookup.ContainsKey(type))
+				this.TypeLookup.Add(type, tsType);
+			return tsType;
 		}
 		#endregion
 
@@ -186,7 +244,43 @@ namespace TypeScripter
 		private TsInterface GenerateInterface(Type type)
 		{
 			var tsInterface = new TsInterface(GetName(type));
-			this.TypeLookup.Add(type, tsInterface);
+			if (!this.TypeLookup.ContainsKey(type))
+				this.TypeLookup.Add(type, tsInterface);
+
+			// resolve interfaces implemented by the type
+			foreach (var interfaceType in type.GetInterfaces())
+				this.AddType(interfaceType);
+
+			if (type.IsGenericType)
+			{
+				if (type.IsGenericTypeDefinition)
+				{
+					foreach (var genericArgument in type.GetGenericArguments())
+					{
+						var tsTypeParameter = new TsTypeParameter(new TsName(genericArgument.Name));
+						var genericArgumentType = genericArgument.GetGenericParameterConstraints().FirstOrDefault();
+						if (genericArgumentType != null)
+						{
+							var tsTypeParameterType = Resolve(genericArgumentType);
+							tsTypeParameter.Extends = tsTypeParameterType.Name;
+						}
+						tsInterface.TypeParameters.Add(tsTypeParameter);
+					}
+				}
+				else
+				{
+					var genericType = type.GetGenericTypeDefinition();
+					var tsGenericType = this.Resolve(genericType);
+				}
+			}
+
+			// resolve the base class if present
+			if (type.BaseType != null)
+			{
+				var baseType = this.Resolve(type.BaseType);
+				if (baseType != null && baseType != TsPrimitive.Any)
+					tsInterface.BaseInterfaces.Add(baseType);
+			}
 
 			// process properties
 			foreach (var property in this.Reader.GetProperties(type))
@@ -207,9 +301,31 @@ namespace TypeScripter
 			return tsInterface;
 		}
 
+		private TsEnum GenerateEnum(Type type)
+		{
+			var names = type.GetEnumNames();
+			var values = type.GetEnumValues();
+			var entries = new Dictionary<string, int?>();
+			for (int i = 0; i < values.Length; i++)
+				entries.Add(names[i], Convert.ToInt32(values.GetValue(i)));
+			var tsEnum = new TsEnum(GetName(type), entries);
+			this.TypeLookup.Add(type, tsEnum);
+			return tsEnum;
+		}
+
 		protected virtual TsName GetName(Type type)
 		{
-			return new TsName(type.Name, type.Namespace);
+			const char genericNameSymbol = '`';
+
+            var typeName = type.Name;
+			if (type.IsGenericType)
+			{
+				if(typeName.Contains(genericNameSymbol))
+					typeName = typeName.Substring(0, typeName.IndexOf(genericNameSymbol));
+
+			}
+
+			return new TsName(typeName, type.Namespace);
 		}
 
 		protected virtual TsName GetName(ParameterInfo parameter)
