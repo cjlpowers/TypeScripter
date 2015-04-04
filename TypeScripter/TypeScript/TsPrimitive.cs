@@ -15,6 +15,7 @@ namespace TypeScripter.TypeScript
 		public static readonly TsPrimitive Boolean = new TsPrimitive(new TsName("boolean"));
 		public static readonly TsPrimitive Number = new TsPrimitive(new TsName("number"));
 		public static readonly TsPrimitive String = new TsPrimitive(new TsName("string"));
+		public static readonly TsPrimitive Undefined = new TsPrimitive(new TsName("undefined"));
 		#endregion
 
 		#region Creation
