@@ -14,7 +14,7 @@ namespace TypeScripter.Readers
 		#region ITypeReader
 		public virtual IEnumerable<Type> GetTypes(Assembly assembly)
 		{
-			return assembly.GetTypes()
+			return assembly.GetExportedTypes()
 				.Where(x => x.IsPublic)
 				.Where(x => !x.IsGenericType);
 		}
@@ -28,6 +28,8 @@ namespace TypeScripter.Readers
 		public virtual IEnumerable<MethodInfo> GetMethods(Type type)
 		{
 			return type.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+				.Where(x => !x.GetParameters().Any(y=>y.ParameterType.IsByRef))
+				.Where(x => !x.ReturnType.IsPointer)
 				.Where(x => !x.IsSpecialName);
 		}
 

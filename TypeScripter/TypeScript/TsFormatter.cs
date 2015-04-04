@@ -114,6 +114,8 @@ namespace TypeScripter.TypeScript
 				this.WriteNewline();
 				using (Indent())
 				{
+					foreach (var type in module.Types.OfType<TsEnum>())
+						this.Write(this.Format(type));
 					foreach (var type in module.Types.OfType<TsInterface>())
 						this.Write(this.Format(type));
 				}
@@ -129,7 +131,10 @@ namespace TypeScripter.TypeScript
 			using (var sbc = new StringBuilderContext(this))
 			{
 				this.WriteIndent();
-				this.Write("interface {0} {{", Format(tsInterface.Name));
+				this.Write("interface {0}{1} {2} {{",
+					Format(tsInterface.Name), 
+					Format(tsInterface.TypeParameters),
+					tsInterface.BaseInterfaces.Count > 0 ? string.Format("extends {0}", string.Join(", ", tsInterface.BaseInterfaces.Select(Format))) : string.Empty);
 				this.WriteNewline();
 				using (Indent())
 				{
@@ -141,6 +146,7 @@ namespace TypeScripter.TypeScript
 				}
 				this.WriteIndent();
 				this.Write("}");
+				this.WriteNewline();
 				this.WriteNewline();
 				return sbc.ToString();
 			}
@@ -162,19 +168,22 @@ namespace TypeScripter.TypeScript
 			using (var sbc = new StringBuilderContext(this))
 			{
 				this.WriteIndent();
-				this.Write("{0}({1}){2};",
+				this.Write("{0}{1}({2}){3};",
 					Format(function.Name),
-					string.Join(", ", function.Parameters.Select(x => Format(x))),
-					function.ReturnType == TsPrimitive.Any ? string.Empty : string.Format(" :{0}", FormatFunctionReturn(function.ReturnType))
+					Format(function.TypeParameters),
+					Format(function.Parameters),
+					function.ReturnType == TsPrimitive.Any ? string.Empty : string.Format(": {0}", Format(function.ReturnType))
 				);
 				this.WriteNewline();
 				return sbc.ToString();
 			}
 		}
 
-		public virtual string FormatFunctionReturn(TsType returnType)
+		public virtual string Format(TsType tsType)
 		{
-			return returnType.Name.FullName;
+			if (tsType is TsGenericType)
+				return Format((TsGenericType)tsType);
+			return tsType.Name.FullName;
 		}
 
 		public virtual string Format(TsEnum tsEnum)
@@ -213,6 +222,28 @@ namespace TypeScripter.TypeScript
 				this.Write("{0}{1}: {2}", Format(parameter.Name), parameter.Optional ? "?" : string.Empty, parameter.Type.Name.FullName);
 				return sbc.ToString();
 			}
+		}
+
+		public virtual string Format(IEnumerable<TsParameter> parameters)
+		{
+			return string.Join(", ", parameters.Select(Format));
+		}
+
+		public virtual string Format(TsTypeParameter typeParameter)
+		{
+			return string.Format("{0}{1}", typeParameter.Name, typeParameter.Extends == null ? string.Empty : string.Format(" extends {0}", typeParameter.Extends.FullName));
+		}
+
+		public virtual string Format(IEnumerable<TsTypeParameter> typeParameters)
+		{
+			if (typeParameters.Count() == 0)
+				return string.Empty;
+			return string.Format("<{0}>", string.Join(", ",typeParameters.Select(Format)));
+		}
+
+		public virtual string Format(TsGenericType tsGenericType)
+		{
+			return string.Format("{0}{1}", tsGenericType.Name.FullName, tsGenericType.TypeArguments.Count > 0 ? string.Format("<{0}>", string.Join(", ", tsGenericType.TypeArguments.Select(Format))) : string.Empty);
 		}
 
 		public virtual string Format(TsName name)
