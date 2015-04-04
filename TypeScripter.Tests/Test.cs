@@ -42,11 +42,12 @@ namespace TypeScripter.Tests
 		[Test]
 		public void AssemblyReaderTest()
 		{
-			var scripter = new TestScripter();
+			var scripter = new TypeScripter.Scripter();
 
 			var assembly = typeof(Scripter).Assembly;
 
 			var output = scripter
+				.UsingAssembly(assembly)
 				.AddTypes(assembly)
 				.SaveToFile(string.Format(@"C:\Development\cjlpowers\TypeScripter\TypeScripter.Tests\Test\{0}.ts", assembly.GetName().Name));
 		}
@@ -61,26 +62,6 @@ namespace TypeScripter.Tests
 				.ToString();
 			Console.WriteLine(output);
 		}
-
-		private class TestTypeReader : DefaultTypeReader
-		{
-			public override IEnumerable<Type> GetTypes(Assembly assembly)
-			{
-				return base.GetTypes(assembly).Where(x => !x.Namespace.StartsWith("System"));
-			}
-		}
-
-		private class TestScripter : Scripter
-		{
-			protected override TsType Resolve(Type type)
-			{
-				TsType tsType = null;
-				if (type.Namespace.StartsWith("System"))
-					tsType = TsPrimitive.Any;
-				tsType = base.Resolve(type);
-				return tsType;
-			}
-		}
     }
 
 	class Program
@@ -89,6 +70,7 @@ namespace TypeScripter.Tests
 		{
 			var test = new Test();
 			test.AssemblyReaderTest();
+			test.OutputTest();
 		}
 	}
 
