@@ -293,6 +293,15 @@ namespace TypeScripter
 				var parameters = this.Reader.GetParameters(method);
 				var tsFunction = new TsFunction(GetName(method));
 				tsFunction.ReturnType = returnType;
+				if (method.IsGenericMethod)
+				{
+					foreach (var genericArgument in method.GetGenericArguments())
+					{
+						var tsTypeParameter = new TsTypeParameter(new TsName(genericArgument.Name));
+						tsFunction.TypeParameters.Add(tsTypeParameter);
+					}
+				}
+				
 				foreach (var param in parameters.Select(x => new TsParameter(GetName(x), Resolve(x.ParameterType))))
 					tsFunction.Parameters.Add(param);
 				tsInterface.Functions.Add(tsFunction);
