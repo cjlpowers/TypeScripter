@@ -16,16 +16,19 @@ namespace TypeScripter.Tests
 	public class AssemblyTest : TestBase
 	{
 		[Test]
-		public void SystemAssemblyTest()
+		public void AddTypesFromAssemblyTest()
 		{
+			var assemlby = this.GetType().Assembly;
+
 			var output = new StringBuilder();
 			output.Append(
 				new TypeScripter.Scripter()
-					.AddTypes(typeof(string).Assembly)
+					.UsingAssembly(assemlby)
+					.AddTypes(assemlby)
 			);
 			output.AppendLine();
-			output.AppendLine("var dateTime: System.DateTime;");
-			output.AppendLine("var result: System.DateTime = dateTime.AddDays(1);");
+			output.AppendLine("var assemblyTest: TypeScripter.Tests.AssemblyTest;");
+			output.AppendLine("assemblyTest.AddTypesFromAssemblyTest();");
 
 			ValidateTypeScript(output);
 		}

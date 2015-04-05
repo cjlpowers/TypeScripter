@@ -30,7 +30,7 @@ namespace TypeScripter.Tests
 
 		public class Bar : Foo
 		{
-			public G GetInstance<G>()
+			public G GetInstanceOfType<G>()
 			{
 				return default(G);
 			}
@@ -59,12 +59,11 @@ namespace TypeScripter.Tests
 			output.Append(
 				new TypeScripter.Scripter()
 					.AddType(typeof(Bar))
-					.ToString()
 			);
 			output.AppendLine();
 			output.AppendLine("var bar: TypeScripter.Tests.Bar;");
 			output.AppendLine("var result1: string = bar.GetInstance();");
-			output.AppendLine("var result2: number = bar.GetInstance<number>();");
+			output.AppendLine("var result2: number = bar.GetInstanceOfType<number>();");
 
 			ValidateTypeScript(output);
 		}

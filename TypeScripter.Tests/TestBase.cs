@@ -24,7 +24,7 @@ namespace TypeScripter.Tests
 
 		protected void ValidateTypeScript(string typeScript)
 		{
-			System.IO.File.WriteAllText(@"C:\Development\cjlpowers\TypeScripter\TypeScripter.Tests\Test\TypeScripter.ts", typeScript);
+			Console.WriteLine(typeScript);
             var result = TypeScriptCompiler.Compile(typeScript);
 			Assert.AreEqual(0, result.ReturnCode, result.Output);
 		}
