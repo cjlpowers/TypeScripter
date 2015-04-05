@@ -16,19 +16,21 @@ namespace TypeScripter.Readers
 		{
 			return assembly.GetExportedTypes()
 				.Where(x => x.IsPublic)
-				.Where(x => !x.IsGenericType);
+				.Where(x => !x.IsPointer);
 		}
 
 		public virtual IEnumerable<PropertyInfo> GetProperties(Type type)
 		{
 			return type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+				.Where(x => !x.PropertyType.IsPointer)
 				.Where(x => !x.IsSpecialName);
 		}
 
 		public virtual IEnumerable<MethodInfo> GetMethods(Type type)
 		{
 			return type.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
-				.Where(x => !x.GetParameters().Any(y=>y.ParameterType.IsByRef))
+				.Where(x => !x.GetParameters().Any(y => y.ParameterType.IsByRef))
+				.Where(x => !x.GetParameters().Any(y => y.ParameterType.IsPointer))
 				.Where(x => !x.ReturnType.IsPointer)
 				.Where(x => !x.IsSpecialName);
 		}
