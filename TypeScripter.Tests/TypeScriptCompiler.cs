@@ -34,14 +34,25 @@ namespace TypeScripter.Tests
 			}
 
 			/// <summary>
+			/// The compiler output
+			/// </summary>
+			public string ErrorOutput
+			{
+				get;
+				private set;
+			}
+
+			/// <summary>
 			/// Constructor
 			/// </summary>
 			/// <param name="returnCode"></param>
 			/// <param name="output"></param>
-			public Result(int returnCode, string output)
+			/// <param name="errorOutput"></param>
+			public Result(int returnCode, string output, string errorOutput)
 			{
 				this.ReturnCode = returnCode;
 				this.Output = output;
+				this.ErrorOutput = errorOutput;
 			}
 
 		}
@@ -57,14 +68,18 @@ namespace TypeScripter.Tests
 		{
 			var options = "";
 			var process = new Process();
-			process.StartInfo.FileName = "tsc";
+			process.StartInfo.FileName = "tsc.cmd";
 			process.StartInfo.Arguments = string.Format("{0} {1}", options, string.Join(" ", files));
+			process.StartInfo.WorkingDirectory = System.IO.Directory.GetCurrentDirectory() + "\\..\\..";
+            process.StartInfo.CreateNoWindow = true;
 			process.StartInfo.UseShellExecute = false;
-            process.StartInfo.RedirectStandardOutput = true;
+			process.StartInfo.RedirectStandardOutput = true;
+			process.StartInfo.RedirectStandardError = true;
 			process.Start();
 			process.WaitForExit(10 * 1000);
 			var output = process.StandardOutput.ReadToEnd();
-			return new Result(process.ExitCode, output);
+			var errorOutput = process.StandardError.ReadToEnd();
+			return new Result(process.ExitCode, output, errorOutput);
         }
 
 		/// <summary>
