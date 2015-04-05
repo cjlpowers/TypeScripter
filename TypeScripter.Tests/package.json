@@ -1,0 +1,9 @@
+{
+	"name": "TypeScripter.Tests",
+	"version": "1.0.0",
+	"description": "A project for testing TypeScripter",
+	"dependencies": {
+		"typescript": "^1.5.0-alpha"
+	},
+	"author": "Chris Powers"
+}
