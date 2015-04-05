@@ -305,9 +305,9 @@ namespace TypeScripter
 		{
 			var names = type.GetEnumNames();
 			var values = type.GetEnumValues();
-			var entries = new Dictionary<string, int?>();
+			var entries = new Dictionary<string, long?>();
 			for (int i = 0; i < values.Length; i++)
-				entries.Add(names[i], Convert.ToInt32(values.GetValue(i)));
+				entries.Add(names[i], Convert.ToInt64(values.GetValue(i)));
 			var tsEnum = new TsEnum(GetName(type), entries);
 			this.TypeLookup.Add(type, tsEnum);
 			return tsEnum;
