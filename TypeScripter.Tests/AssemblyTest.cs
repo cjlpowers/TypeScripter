@@ -13,7 +13,7 @@ using TypeScripter.Readers;
 namespace TypeScripter.Tests
 {
 	[TestFixture]
-	public class AssemblyTest : TestBase
+	public class AssemblyTest : Test
 	{
 		[Test]
 		public void AddTypesFromAssemblyTest()
