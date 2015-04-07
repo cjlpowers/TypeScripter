@@ -15,7 +15,7 @@ namespace TypeScripter.Tests
 	/// <summary>
 	/// The base class for TypeScripter tests
 	/// </summary>
-    public abstract class TestBase
+    public abstract class Test
     {
 		protected void ValidateTypeScript(Scripter scripter)
 		{
