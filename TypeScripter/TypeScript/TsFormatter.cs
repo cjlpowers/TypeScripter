@@ -172,12 +172,17 @@ namespace TypeScripter.TypeScript
 					Format(function.Name),
 					Format(function.TypeParameters),
 					Format(function.Parameters),
-					function.ReturnType == TsPrimitive.Any ? string.Empty : string.Format(": {0}", Format(function.ReturnType))
+                    function.ReturnType == TsPrimitive.Any ? string.Empty : string.Format(": {0}", FormatReturnType(function.ReturnType))
 				);
 				this.WriteNewline();
 				return sbc.ToString();
 			}
 		}
+
+        public virtual string FormatReturnType(TsType tsReturnType)
+        {
+            return Format(tsReturnType);
+        }
 
 		public virtual string Format(TsType tsType)
 		{
