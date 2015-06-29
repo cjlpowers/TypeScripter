@@ -70,11 +70,20 @@ namespace TypeScripter.Examples
 
 	public class PromiseFormatter : TsFormatter
 	{
-		public override string Format(TsType returnType)
-		{
-			return string.Format("ng.IPromise<{0}>", base.Format(returnType));
-		}
+        public override string FormatReturnType(TsType tsReturnType)
+        {
+            return string.Format("ng.IPromise<{0}>", base.Format(tsReturnType));
+        }
 	}
+
+    public class Scripter : TypeScripter.Scripter
+    {
+        public Scripter()
+        {
+            Func<Type, bool> typeFilter = (type) => !type.Namespace.StartsWith("System");
+            this.UsingTypeFilter(typeFilter);
+        }
+    }
 	#endregion
 
 	[TestFixture]
@@ -83,7 +92,7 @@ namespace TypeScripter.Examples
 		[Test]
 		public void OutputTest()
 		{
-			var scripter = new TypeScripter.Scripter();
+			var scripter = new Scripter();
 			var output = scripter
 				.AddType(typeof(Animal))
 				.ToString();
@@ -113,7 +122,7 @@ namespace TypeScripter.Examples
 		[Test]
 		public void OutputTest()
 		{
-			var scripter = new TypeScripter.Scripter();
+			var scripter = new Scripter();
 			var output = scripter
 				.AddType(typeof(MammalZoo))
 				.ToString();
@@ -129,7 +138,7 @@ namespace TypeScripter.Examples
 		public void OutputTest()
 		{
 			var assembly = this.GetType().Assembly;
-			var scripter = new TypeScripter.Scripter();
+			var scripter = new Scripter();
 			var output = scripter
 				.AddTypes(assembly)
 				.ToString();
@@ -145,7 +154,7 @@ namespace TypeScripter.Examples
 		public void OutputTest()
 		{
 			var assembly = this.GetType().Assembly;
-			var scripter = new TypeScripter.Scripter();
+			var scripter = new Scripter();
 			var output = scripter
 				.UsingTypeReader(
 					new TypeScripter.Readers.CompositeTypeReader(
@@ -167,7 +176,7 @@ namespace TypeScripter.Examples
 		public void OutputTest()
 		{
 			var assembly = this.GetType().Assembly;
-			var scripter = new TypeScripter.Scripter();
+			var scripter = new Scripter();
 			var output = scripter
 				.UsingTypeReader(
 					new TypeScripter.Readers.CompositeTypeReader(

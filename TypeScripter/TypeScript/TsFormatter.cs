@@ -157,7 +157,7 @@ namespace TypeScripter.TypeScript
 			using (var sbc = new StringBuilderContext(this))
 			{
 				this.WriteIndent();
-				this.Write("{0}: {1};", Format(property.Name), property.Type.Name.FullName);
+				this.Write("{0}: {1};", Format(property.Name), Format(property.Type));
 				this.WriteNewline();
 				return sbc.ToString();
 			}
@@ -224,7 +224,7 @@ namespace TypeScripter.TypeScript
 		{
 			using (var sbc = new StringBuilderContext(this))
 			{
-				this.Write("{0}{1}: {2}", Format(parameter.Name), parameter.Optional ? "?" : string.Empty, parameter.Type.Name.FullName);
+				this.Write("{0}{1}: {2}", Format(parameter.Name), parameter.Optional ? "?" : string.Empty, Format(parameter.Type));
 				return sbc.ToString();
 			}
 		}
