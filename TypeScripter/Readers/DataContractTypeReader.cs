@@ -10,7 +10,11 @@ using TypeScripter.TypeScript;
 
 namespace TypeScripter.Readers
 {
-	public class DataContractTypeReader : DefaultTypeReader
+    /// <summary>
+    /// A TypeReader implementation which processes types decorated with [DataContract] and members marked with [DataMember]
+    /// </summary>
+    /// <remarks>This class is useful when you want to generate TypeScript definitions for types used with WCF services.</remarks>
+	public class DataContractTypeReader : TypeReader
 	{
 		#region ITypeReader
 		public override IEnumerable<Type> GetTypes(Assembly assembly)

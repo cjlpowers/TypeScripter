@@ -10,21 +10,28 @@ using TypeScripter.TypeScript;
 
 namespace TypeScripter.Readers
 {
-	public class CompositeTypeReader : DefaultTypeReader
-	{
-		private IEnumerable<ITypeReader> Readers
+    /// <summary>
+    /// A TypeReader implementation that allows one to combine the output of other TypeReaders
+    /// </summary>
+	public class CompositeTypeReader : TypeReader
+    {
+        #region Prperties
+        private IEnumerable<TypeReader> Readers
 		{
 			get;
 			set;
 		}
+        #endregion
 
-		public CompositeTypeReader(params ITypeReader[] readers)
+        #region Creation
+        public CompositeTypeReader(params TypeReader[] readers)
 		{
 			this.Readers = readers;
 		}
+        #endregion
 
-		#region ITypeReader
-		public override IEnumerable<Type> GetTypes(Assembly assembly)
+        #region ITypeReader
+        public override IEnumerable<Type> GetTypes(Assembly assembly)
 		{
 			return this.Readers
 				.SelectMany(x => x.GetTypes(assembly))

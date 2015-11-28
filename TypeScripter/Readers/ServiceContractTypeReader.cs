@@ -10,7 +10,11 @@ using TypeScripter.TypeScript;
 
 namespace TypeScripter.Readers
 {
-	public class ServiceContractTypeReader : DefaultTypeReader
+    /// <summary>
+    /// A TypeReader implementation which processes types and methods decorated with [ServiceContract] and [ServiceOperation] respectively.
+    /// </summary>
+    /// <remarks>This class is useful when you want to generate TypeScript definitions for WCF Services.</remarks>
+	public class ServiceContractTypeReader : TypeReader
 	{
 		#region Methods
 		private bool IsServiceContract(Type type)

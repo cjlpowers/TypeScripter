@@ -10,6 +10,9 @@ using TypeScripter.Readers;
 
 namespace TypeScripter
 {
+    /// <summary>
+    /// A class which generates TypeScript definitions for CLR types
+    /// </summary>
 	public class Scripter
 	{
 		#region Properties
@@ -31,7 +34,7 @@ namespace TypeScripter
 			set;
 		}
 
-		private ITypeReader Reader
+		private TypeReader Reader
 		{
 			get;
 			set;
@@ -50,6 +53,7 @@ namespace TypeScripter
 		/// </summary>
 		public Scripter()
 		{
+            // Add mappings for primitives 
 			this.TypeLookup = new Dictionary<Type, TsType>()
 			{
 				{ typeof(void), TsPrimitive.Void },
@@ -63,7 +67,9 @@ namespace TypeScripter
 				{ typeof(float), TsPrimitive.Number },
 				{ typeof(double), TsPrimitive.Number },
 			};
-			this.Reader = new DefaultTypeReader();
+
+            // initialize the scripter with default implementations
+			this.Reader = new TypeReader();
 			this.Writer = new TsFormatter();
 		}
 		#endregion
@@ -83,7 +89,12 @@ namespace TypeScripter
 		#endregion
 
 		#region Operations
-		public Scripter UsingTypeReader(ITypeReader reader)
+        /// <summary>
+        /// Configures the scripter to use a particular TypeReader
+        /// </summary>
+        /// <param name="reader">The type reader</param>
+        /// <returns>The scripter</returns>
+		public Scripter UsingTypeReader(TypeReader reader)
 		{
 			if (reader == null)
 				throw new ArgumentNullException("reader");
@@ -91,6 +102,11 @@ namespace TypeScripter
 			return this;
 		}
 
+        /// <summary>
+        /// Adds a particular type to be scripted
+        /// </summary>
+        /// <param name="type">The type</param>
+        /// <returns>The scripter</returns>
 		public Scripter AddType(Type type)
 		{
 			this.Resolve(type);
@@ -98,7 +114,7 @@ namespace TypeScripter
 		}
 
 		/// <summary>
-		/// Adds a set of types to the scripter.
+		/// Adds a set of types to be scripted
 		/// </summary>
 		/// <param name="types">The types to add</param>
 		/// <returns>The scripter</returns>
@@ -190,57 +206,12 @@ namespace TypeScripter
 		}
 		#endregion
 
-		#region Type Resolution
-		protected virtual TsType Resolve(Type type)
-		{
-			// see if we have already processed the type
-			TsType tsType;
-			if (this.TypeLookup.TryGetValue(type, out tsType))
-				return tsType;
-
-			// should this assembly be considered?
-			if (this.AssemblyFilter != null && !this.AssemblyFilter(type.Assembly))
-				return TsPrimitive.Any;
-
-			// should this assembly be considered?
-			if (this.TypeFilter != null && !this.TypeFilter(type))
-				return TsPrimitive.Any;
-
-			if (type.IsGenericParameter)
-				return new TsGenericType(new TsName(type.Name));
-			else if (type.IsGenericType && !type.IsGenericTypeDefinition)
-			{
-				var tsGenericTypeDefinition = Resolve(type.GetGenericTypeDefinition());
-				var tsGenericType = new TsGenericType(tsGenericTypeDefinition.Name);
-				foreach (var argument in type.GetGenericArguments())
-				{
-					var tsArgType = this.Resolve(argument);
-					tsGenericType.TypeArguments.Add(tsArgType);
-                }
-				return tsGenericType;
-			}
-			else if (type.IsArray && type.HasElementType)
-			{
-				var elementType = this.Resolve(type.GetElementType());
-				return new TsArray(elementType, type.GetArrayRank());
-			}
-			else if (type.IsEnum)
-				tsType = GenerateEnum(type);
-			else if (type.IsAnsiClass)
-				tsType = GenerateInterface(type);
-			else if (type.IsInterface)
-				tsType = GenerateInterface(type);
-			else
-				tsType = TsPrimitive.Any;
-
-			// add the lookup
-			if (!this.TypeLookup.ContainsKey(type))
-				this.TypeLookup.Add(type, tsType);
-			return tsType;
-		}
-		#endregion
-
 		#region Type Generation
+        /// <summary>
+        /// Generates a TypeScript interface for a particular CLR type
+        /// </summary>
+        /// <param name="type">The type</param>
+        /// <returns>The resulting TypeScript interface</returns>
 		private TsInterface GenerateInterface(Type type)
 		{
 			var tsInterface = new TsInterface(GetName(type));
@@ -284,32 +255,28 @@ namespace TypeScripter
 
 			// process properties
 			foreach (var property in this.Reader.GetProperties(type))
-				tsInterface.Properties.Add(new TsProperty(GetName(property), Resolve(property.PropertyType)));
+            {
+                var tsProperty = this.Resolve(property);
+                if (tsProperty != null)
+                    tsInterface.Properties.Add(tsProperty);
+            }	
 
 			// process methods
-			foreach (var method in this.Reader.GetMethods(type))
-			{
-				var returnType = Resolve(method.ReturnType);
-				var parameters = this.Reader.GetParameters(method);
-				var tsFunction = new TsFunction(GetName(method));
-				tsFunction.ReturnType = returnType;
-				if (method.IsGenericMethod)
-				{
-					foreach (var genericArgument in method.GetGenericArguments())
-					{
-						var tsTypeParameter = new TsTypeParameter(new TsName(genericArgument.Name));
-						tsFunction.TypeParameters.Add(tsTypeParameter);
-					}
-				}
-				
-				foreach (var param in parameters.Select(x => new TsParameter(GetName(x), Resolve(x.ParameterType))))
-					tsFunction.Parameters.Add(param);
-				tsInterface.Functions.Add(tsFunction);
-			}
+            foreach (var method in this.Reader.GetMethods(type))
+            {
+                var tsFunction = this.Resolve(method);
+                if(tsFunction != null)
+                    tsInterface.Functions.Add(tsFunction);
+            }
 
 			return tsInterface;
 		}
 
+        /// <summary>
+        /// Generates a TypeScript enum for a particular CLR enum type
+        /// </summary>
+        /// <param name="type">The enum type</param>
+        /// <returns>The resulting TypeScrpt enum</returns>
 		private TsEnum GenerateEnum(Type type)
 		{
 			var names = type.GetEnumNames();
@@ -322,6 +289,11 @@ namespace TypeScripter
 			return tsEnum;
 		}
 
+        /// <summary>
+        /// Gets the TypeScript type name for a particular type
+        /// </summary>
+        /// <param name="type">The type</param>
+        /// <returns>The TypeScript type name</returns>
 		protected virtual TsName GetName(Type type)
 		{
 			const char genericNameSymbol = '`';
@@ -331,22 +303,122 @@ namespace TypeScripter
 			{
 				if(typeName.Contains(genericNameSymbol))
 					typeName = typeName.Substring(0, typeName.IndexOf(genericNameSymbol));
-
 			}
 
 			return new TsName(typeName, type.Namespace);
 		}
 
+        /// <summary>
+        /// Gets the TypeScript name for a CLR parameter
+        /// </summary>
+        /// <param name="parameter">The parameter</param>
+        /// <returns>The TypeScript name</returns>
 		protected virtual TsName GetName(ParameterInfo parameter)
 		{
 			return new TsName(parameter.Name);
 		}
 
+        /// <summary>
+        /// Gets the TypeScript name for a CLR member
+        /// </summary>
+        /// <param name="member">The member</param>
+        /// <returns>The TypeScript name</returns>
 		protected virtual TsName GetName(MemberInfo member)
 		{
 			return new TsName(member.Name);
 		}
 		#endregion
+
+        #region Type Resolution
+        /// <summary>
+        /// Resolves a type
+        /// </summary>
+        /// <param name="type">The type to resolve</param>
+        /// <returns>The TypeScript type definition</returns>
+        protected virtual TsType Resolve(Type type)
+        {
+            // see if we have already processed the type
+            TsType tsType;
+            if (this.TypeLookup.TryGetValue(type, out tsType))
+                return tsType;
+
+            // should this assembly be considered?
+            if (this.AssemblyFilter != null && !this.AssemblyFilter(type.Assembly))
+                return TsPrimitive.Any;
+
+            // should this assembly be considered?
+            if (this.TypeFilter != null && !this.TypeFilter(type))
+                return TsPrimitive.Any;
+
+            if (type.IsGenericParameter)
+                return new TsGenericType(new TsName(type.Name));
+            else if (type.IsGenericType && !type.IsGenericTypeDefinition)
+            {
+                var tsGenericTypeDefinition = Resolve(type.GetGenericTypeDefinition());
+                var tsGenericType = new TsGenericType(tsGenericTypeDefinition.Name);
+                foreach (var argument in type.GetGenericArguments())
+                {
+                    var tsArgType = this.Resolve(argument);
+                    tsGenericType.TypeArguments.Add(tsArgType);
+                }
+                return tsGenericType;
+            }
+            else if (type.IsArray && type.HasElementType)
+            {
+                var elementType = this.Resolve(type.GetElementType());
+                return new TsArray(elementType, type.GetArrayRank());
+            }
+            else if (type.IsEnum)
+                tsType = GenerateEnum(type);
+            else if (type.IsAnsiClass)
+                tsType = GenerateInterface(type);
+            else if (type.IsInterface)
+                tsType = GenerateInterface(type);
+            else
+                tsType = TsPrimitive.Any;
+
+            // add the lookup
+            if (!this.TypeLookup.ContainsKey(type))
+                this.TypeLookup.Add(type, tsType);
+            return tsType;
+        }
+
+        /// <summary>
+        /// Resolves a property
+        /// </summary>
+        /// <param name="property">The property to resolve</param>
+        /// <returns></returns>
+        protected virtual TsProperty Resolve(PropertyInfo property)
+        {
+            return new TsProperty(GetName(property), Resolve(property.PropertyType));
+        }
+
+        /// <summary>
+        /// Resolves a method
+        /// </summary>
+        /// <param name="method">The method to resolve</param>
+        /// <returns>The TypeScript function definition</returns>
+        protected virtual TsFunction Resolve(MethodInfo method)
+        {
+            var returnType = Resolve(method.ReturnType);
+            var parameters = this.Reader.GetParameters(method);
+            var tsFunction = new TsFunction(GetName(method));
+            tsFunction.ReturnType = returnType;
+            if (method.IsGenericMethod)
+            {
+                foreach (var genericArgument in method.GetGenericArguments())
+                {
+                    var tsTypeParameter = new TsTypeParameter(new TsName(genericArgument.Name));
+                    tsFunction.TypeParameters.Add(tsTypeParameter);
+                }
+            }
+
+            foreach (var param in parameters.Select(x => new TsParameter(GetName(x), Resolve(x.ParameterType))))
+                tsFunction.Parameters.Add(param);
+
+            return tsFunction;
+        }
+        #endregion
 
 		#region Modules
 		public IEnumerable<TsModule> Modules()

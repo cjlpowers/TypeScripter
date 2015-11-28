@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace TypeScripter.TypeScript
 {
+    /// <summary>
+    /// A class which is responsible for rendering the TypeScript output
+    /// </summary>
 	public class TsFormatter
 	{
 		#region Internal Constructs
