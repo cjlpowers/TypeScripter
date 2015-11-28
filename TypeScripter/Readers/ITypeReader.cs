@@ -8,6 +8,7 @@ namespace TypeScripter.Readers
 	{
 		IEnumerable<MethodInfo> GetMethods(Type type);
 		IEnumerable<ParameterInfo> GetParameters(MethodInfo method);
+        IEnumerable<FieldInfo> GetFields(Type type);
 		IEnumerable<PropertyInfo> GetProperties(Type type);
 		IEnumerable<Type> GetTypes(Assembly assembly);
 	}

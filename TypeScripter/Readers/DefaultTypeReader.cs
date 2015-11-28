@@ -9,7 +9,7 @@ using TypeScripter.TypeScript;
 
 namespace TypeScripter.Readers
 {
-	public class DefaultTypeReader : ITypeReader
+    public class DefaultTypeReader : ITypeReader
 	{
 		#region ITypeReader
 		public virtual IEnumerable<Type> GetTypes(Assembly assembly)
@@ -18,6 +18,12 @@ namespace TypeScripter.Readers
 				.Where(x => x.IsPublic)
 				.Where(x => !x.IsPointer);
 		}
+
+	    public virtual IEnumerable<FieldInfo> GetFields(Type type)
+	    {
+            // Backwards compatible implementation.
+	        return new FieldInfo[0];
+	    }
 
 		public virtual IEnumerable<PropertyInfo> GetProperties(Type type)
 		{
