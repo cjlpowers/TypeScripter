@@ -196,7 +196,7 @@ namespace TypeScripter.TypeScript
 			using (var sbc = new StringBuilderContext(this))
 			{
 				this.WriteIndent();
-				this.Write("enum {0} {{", Format(tsEnum.Name));
+				this.Write("const enum {0} {{", Format(tsEnum.Name));
 				this.WriteNewline();
 				using (Indent())
 				{
