@@ -15,8 +15,8 @@ namespace TypeScripter.Tests
 	/// <summary>
 	/// The base class for TypeScripter tests
 	/// </summary>
-    public abstract class Test
-    {
+	public abstract class Test
+	{
 		protected void ValidateTypeScript(Scripter scripter)
 		{
 			ValidateTypeScript(scripter.ToString());
@@ -25,7 +25,7 @@ namespace TypeScripter.Tests
 		protected void ValidateTypeScript(string typeScript)
 		{
 			Console.WriteLine(typeScript);
-            var result = TypeScriptCompiler.Compile(typeScript);
+			var result = TypeScriptCompiler.Compile(typeScript);
 			Assert.AreEqual(0, result.ReturnCode, result.Output);
 		}
 

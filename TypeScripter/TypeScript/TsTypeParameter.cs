@@ -8,7 +8,7 @@ namespace TypeScripter.TypeScript
 {
 	public sealed class TsTypeParameter : TsObject
 	{
-		#region Properties 
+		#region Properties
 		/// <summary>
 		/// The name of the type which constrains this type parameter
 		/// </summary>

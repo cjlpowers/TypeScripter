@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace TypeScripter.TypeScript
 {
-    /// <summary>
-    /// A class which is responsible for rendering the TypeScript output
-    /// </summary>
+	/// <summary>
+	/// A class which is responsible for rendering the TypeScript output
+	/// </summary>
 	public class TsFormatter
 	{
 		#region Internal Constructs
@@ -135,7 +135,7 @@ namespace TypeScripter.TypeScript
 			{
 				this.WriteIndent();
 				this.Write("interface {0}{1} {2} {{",
-					Format(tsInterface.Name), 
+					Format(tsInterface.Name),
 					Format(tsInterface.TypeParameters),
 					tsInterface.BaseInterfaces.Count > 0 ? string.Format("extends {0}", string.Join(", ", tsInterface.BaseInterfaces.Select(Format))) : string.Empty);
 				this.WriteNewline();
@@ -175,17 +175,17 @@ namespace TypeScripter.TypeScript
 					Format(function.Name),
 					Format(function.TypeParameters),
 					Format(function.Parameters),
-                    function.ReturnType == TsPrimitive.Any ? string.Empty : string.Format(": {0}", FormatReturnType(function.ReturnType))
+					function.ReturnType == TsPrimitive.Any ? string.Empty : string.Format(": {0}", FormatReturnType(function.ReturnType))
 				);
 				this.WriteNewline();
 				return sbc.ToString();
 			}
 		}
 
-        public virtual string FormatReturnType(TsType tsReturnType)
-        {
-            return Format(tsReturnType);
-        }
+		public virtual string FormatReturnType(TsType tsReturnType)
+		{
+			return Format(tsReturnType);
+		}
 
 		public virtual string Format(TsType tsType)
 		{
@@ -246,7 +246,7 @@ namespace TypeScripter.TypeScript
 		{
 			if (typeParameters.Count() == 0)
 				return string.Empty;
-			return string.Format("<{0}>", string.Join(", ",typeParameters.Select(Format)));
+			return string.Format("<{0}>", string.Join(", ", typeParameters.Select(Format)));
 		}
 
 		public virtual string Format(TsGenericType tsGenericType)
@@ -285,7 +285,7 @@ namespace TypeScripter.TypeScript
 		}
 
 		private void WriteNewline()
-		{	
+		{
 			this.Write(Environment.NewLine);
 		}
 

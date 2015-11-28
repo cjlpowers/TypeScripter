@@ -27,7 +27,7 @@ namespace TypeScripter.TypeScript
 		public TsModule(TsName name, IEnumerable<TsType> types = null)
 			: base(name)
 		{
-			this.Types = types != null? new List<TsType>(types) : new List<TsType>();
+			this.Types = types != null ? new List<TsType>(types) : new List<TsType>();
 		}
 		#endregion
 	}

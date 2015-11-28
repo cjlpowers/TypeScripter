@@ -70,20 +70,20 @@ namespace TypeScripter.Examples
 
 	public class PromiseFormatter : TsFormatter
 	{
-        public override string FormatReturnType(TsType tsReturnType)
-        {
-            return string.Format("ng.IPromise<{0}>", base.Format(tsReturnType));
-        }
+		public override string FormatReturnType(TsType tsReturnType)
+		{
+			return string.Format("ng.IPromise<{0}>", base.Format(tsReturnType));
+		}
 	}
 
-    public class Scripter : TypeScripter.Scripter
-    {
-        public Scripter()
-        {
-            Func<Type, bool> typeFilter = (type) => !type.Namespace.StartsWith("System");
-            this.UsingTypeFilter(typeFilter);
-        }
-    }
+	public class Scripter : TypeScripter.Scripter
+	{
+		public Scripter()
+		{
+			Func<Type, bool> typeFilter = (type) => !type.Namespace.StartsWith("System");
+			this.UsingTypeFilter(typeFilter);
+		}
+	}
 	#endregion
 
 	[TestFixture]
@@ -159,7 +159,7 @@ namespace TypeScripter.Examples
 				.UsingTypeReader(
 					new TypeScripter.Readers.CompositeTypeReader(
 						new TypeScripter.Readers.DataContractTypeReader(),
-                        new TypeScripter.Readers.ServiceContractTypeReader()
+						new TypeScripter.Readers.ServiceContractTypeReader()
 					)
 				)
 				.AddTypes(assembly)

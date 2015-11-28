@@ -71,7 +71,7 @@ namespace TypeScripter.Tests
 			process.StartInfo.FileName = "tsc.cmd";
 			process.StartInfo.Arguments = string.Format("{0} {1}", options, string.Join(" ", files));
 			process.StartInfo.WorkingDirectory = System.IO.Directory.GetCurrentDirectory() + "\\..\\..";
-            process.StartInfo.CreateNoWindow = true;
+			process.StartInfo.CreateNoWindow = true;
 			process.StartInfo.UseShellExecute = false;
 			process.StartInfo.RedirectStandardOutput = true;
 			process.StartInfo.RedirectStandardError = true;
@@ -80,7 +80,7 @@ namespace TypeScripter.Tests
 			var output = process.StandardOutput.ReadToEnd();
 			var errorOutput = process.StandardError.ReadToEnd();
 			return new Result(process.ExitCode, output, errorOutput);
-        }
+		}
 
 		/// <summary>
 		/// Compiles a specific string of TypeScript

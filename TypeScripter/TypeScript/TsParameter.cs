@@ -8,7 +8,7 @@ namespace TypeScripter.TypeScript
 {
 	public sealed class TsParameter : TsObject
 	{
-		#region Properties 
+		#region Properties
 		public bool Optional
 		{
 			get;
