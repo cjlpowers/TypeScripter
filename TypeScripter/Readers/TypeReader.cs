@@ -33,8 +33,7 @@ namespace TypeScripter.Readers
 		/// <returns>The fields</returns>
 		public virtual IEnumerable<FieldInfo> GetFields(Type type)
 		{
-			// Backwards compatible implementation.
-			return new FieldInfo[0];
+			return type.GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
 		}
 
 		/// <summary>

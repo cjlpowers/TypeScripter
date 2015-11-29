@@ -253,6 +253,14 @@ namespace TypeScripter
 					tsInterface.BaseInterfaces.Add(baseType);
 			}
 
+			// process fields
+			foreach (var field in this.Reader.GetFields(type))
+			{
+				var tsProperty = this.Resolve(field);
+				if (tsProperty != null)
+					tsInterface.Properties.Add(tsProperty);
+			}
+
 			// process properties
 			foreach (var property in this.Reader.GetProperties(type))
 			{
@@ -381,6 +389,16 @@ namespace TypeScripter
 			if (!this.TypeLookup.ContainsKey(type))
 				this.TypeLookup.Add(type, tsType);
 			return tsType;
+		}
+
+		/// <summary>
+		/// Resolves a field
+		/// </summary>
+		/// <param name="field">The field to resolve</param>
+		/// <returns></returns>
+		protected virtual TsProperty Resolve(FieldInfo field)
+		{
+			return new TsProperty(GetName(field), Resolve(field.FieldType));
 		}
 
 		/// <summary>
