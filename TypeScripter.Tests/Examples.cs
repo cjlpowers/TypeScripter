@@ -188,6 +188,13 @@ namespace TypeScripter.Examples
 				.AddTypes(assembly)
 				.ToString();
 
+			output = @"
+			declare module ng {
+				export interface IPromise<T>{
+				}
+			}
+			" + output;
+
 			ValidateTypeScript(output);
 		}
 	}
