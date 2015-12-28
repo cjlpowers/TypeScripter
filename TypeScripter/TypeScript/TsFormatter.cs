@@ -117,9 +117,9 @@ namespace TypeScripter.TypeScript
 				this.WriteNewline();
 				using (Indent())
 				{
-					foreach (var type in module.Types.OfType<TsEnum>())
+					foreach (var type in module.Types.OfType<TsEnum>().OrderBy(x=>x.Name))
 						this.Write(this.Format(type));
-					foreach (var type in module.Types.OfType<TsInterface>())
+					foreach (var type in module.Types.OfType<TsInterface>().OrderBy(x=>x.Name))
 						this.Write(this.Format(type));
 				}
 				this.WriteIndent();
@@ -137,14 +137,14 @@ namespace TypeScripter.TypeScript
 				this.Write("interface {0}{1} {2} {{",
 					Format(tsInterface.Name),
 					Format(tsInterface.TypeParameters),
-					tsInterface.BaseInterfaces.Count > 0 ? string.Format("extends {0}", string.Join(", ", tsInterface.BaseInterfaces.Select(Format))) : string.Empty);
+                    tsInterface.BaseInterfaces.Count > 0 ? string.Format("extends {0}", string.Join(", ", tsInterface.BaseInterfaces.OrderBy(x => x.Name).Select(Format))) : string.Empty);
 				this.WriteNewline();
 				using (Indent())
 				{
-					foreach (var property in tsInterface.Properties)
+                    foreach (var property in tsInterface.Properties.OrderBy(x => x.Name))
 						this.Write(this.Format(property));
 
-					foreach (var function in tsInterface.Functions)
+                    foreach (var function in tsInterface.Functions.OrderBy(x => x.Name))
 						this.Write(this.Format(function));
 				}
 				this.WriteIndent();
@@ -203,7 +203,7 @@ namespace TypeScripter.TypeScript
 				this.WriteNewline();
 				using (Indent())
 				{
-					var values = tsEnum.Values.ToArray();
+					var values = tsEnum.Values.OrderBy(x=>x.Key).ToArray();
 					for (int i = 0; i < values.Length; i++)
 					{
 						var postFix = i < values.Length - 1 ? "," : string.Empty;

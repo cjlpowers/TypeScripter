@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TypeScripter.TypeScript
 {
-	public class TsName
+	public class TsName : IComparable<TsName>
 	{
 		#region Properties
 		public string Namespace
@@ -52,5 +52,12 @@ namespace TypeScripter.TypeScript
 			return this.FullName;
 		}
 		#endregion
-	}
+
+        #region IComparable<TsName> Members
+        public int CompareTo(TsName other)
+        {
+            return this.FullName.CompareTo(other.FullName);
+        }
+        #endregion
+    }
 }
