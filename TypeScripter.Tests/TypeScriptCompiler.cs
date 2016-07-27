@@ -70,8 +70,12 @@ namespace TypeScripter.Tests
 			var process = new Process();
 			process.StartInfo.FileName = "tsc.cmd";
 			process.StartInfo.Arguments = string.Format("{0} {1}", options, string.Join(" ", files));
-			process.StartInfo.WorkingDirectory = System.IO.Directory.GetCurrentDirectory() + "\\..\\..";
-			process.StartInfo.CreateNoWindow = true;
+#if DOTNET
+            process.StartInfo.WorkingDirectory = System.IO.Directory.GetCurrentDirectory();
+#else
+            process.StartInfo.WorkingDirectory = System.IO.Directory.GetCurrentDirectory() + "\\..\\..";
+#endif
+            process.StartInfo.CreateNoWindow = true;
 			process.StartInfo.UseShellExecute = false;
 			process.StartInfo.RedirectStandardOutput = true;
 			process.StartInfo.RedirectStandardError = true;
@@ -103,6 +107,6 @@ namespace TypeScripter.Tests
 				System.IO.File.Delete(tempFile);
 			}
 		}
-		#endregion
+#endregion
 	}
 }

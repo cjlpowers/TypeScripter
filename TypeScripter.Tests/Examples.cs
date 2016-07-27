@@ -4,8 +4,10 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+#if !DOTNET
 using System.Runtime.Serialization;
 using System.ServiceModel;
+#endif
 
 using NUnit.Framework;
 
@@ -14,7 +16,7 @@ using TypeScripter.Tests;
 
 namespace TypeScripter.Examples
 {
-	#region Example Constructs
+#region Example Constructs
 	public class Animal
 	{
 		public string Age
@@ -47,7 +49,8 @@ namespace TypeScripter.Examples
 	{
 	}
 
-	[DataContract]
+#if !DOTNET
+    [DataContract]
 	public class ZooKeeper
 	{
 		[DataMember]
@@ -67,7 +70,7 @@ namespace TypeScripter.Examples
 			return default(ZooKeeper);
 		}
 	}
-
+#endif
 	public class PromiseFormatter : TsFormatter
 	{
 		public override string FormatReturnType(TsType tsReturnType)
@@ -84,7 +87,7 @@ namespace TypeScripter.Examples
 			this.UsingTypeFilter(typeFilter);
 		}
 	}
-	#endregion
+#endregion
 
 	[TestFixture]
 	public class BasicUsage : Test
@@ -137,7 +140,7 @@ namespace TypeScripter.Examples
 		[Test]
 		public void OutputTest()
 		{
-			var assembly = this.GetType().Assembly;
+			var assembly = this.GetType().Assembly();
 			var scripter = new Scripter();
 			var output = scripter
 				.AddTypes(assembly)
@@ -147,13 +150,14 @@ namespace TypeScripter.Examples
 		}
 	}
 
-	[TestFixture]
+#if !DOTNET
+    [TestFixture]
 	public class TypeReaders : Test
 	{
 		[Test]
 		public void OutputTest()
 		{
-			var assembly = this.GetType().Assembly;
+			var assembly = this.GetType().Assembly();
 			var scripter = new Scripter();
 			var output = scripter
 				.UsingTypeReader(
@@ -168,14 +172,16 @@ namespace TypeScripter.Examples
 			ValidateTypeScript(output);
 		}
 	}
+#endif
 
-	[TestFixture]
+#if !DOTNET
+    [TestFixture]
 	public class Formatters : Test
 	{
 		[Test]
 		public void OutputTest()
 		{
-			var assembly = this.GetType().Assembly;
+			var assembly = this.GetType().Assembly();
 			var scripter = new Scripter();
 			var output = scripter
 				.UsingTypeReader(
@@ -198,6 +204,7 @@ namespace TypeScripter.Examples
 			ValidateTypeScript(output);
 		}
 	}
+#endif
 
 	public class Legacy
 	{

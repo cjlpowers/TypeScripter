@@ -18,7 +18,7 @@ namespace TypeScripter.Tests
 		[Test]
 		public void AddTypesFromAssemblyTest()
 		{
-			var assemlby = this.GetType().Assembly;
+			var assemlby = this.GetType().Assembly();
 
 			var output = new StringBuilder();
 			output.Append(

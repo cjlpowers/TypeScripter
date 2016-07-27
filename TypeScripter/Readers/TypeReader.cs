@@ -22,7 +22,7 @@ namespace TypeScripter.Readers
 		public virtual IEnumerable<Type> GetTypes(Assembly assembly)
 		{
 			return assembly.GetExportedTypes()
-				.Where(x => x.IsPublic)
+				.Where(x => x.IsPublic())
 				.Where(x => !x.IsPointer);
 		}
 
