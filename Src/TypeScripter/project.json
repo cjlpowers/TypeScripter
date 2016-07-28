@@ -1,10 +1,27 @@
 ﻿{
   "version": "1.0.0-*",
-
+  "title": "TypeScripter",
+  "description": "TypeScripter is a .NET class library used to generate TypeScript definitions for .NET types.",
+  "language": "en-US",
+  "authors": [
+    "Chris Powers"
+  ],
+  "packOptions": {
+    "projectUrl": "http://cjlpowers.github.io/TypeScripter",
+    "tags": [
+      "TypeScript",
+      "Definitions"
+    ],
+    "licenseUrl": "https://raw.githubusercontent.com/cjlpowers/TypeScripter/master/LICENSE",
+    "iconUrl": "",
+    "repository": {
+      "type": "git",
+      "url": "git://github.com/cjlpowers/TypeScripter"
+    }
+  },
   "dependencies": {
     "NETStandard.Library": "1.6.0"
   },
-
   "configurations": {
     "Release": {
       "buildOptions": {
@@ -12,12 +29,13 @@
       }
     }
   },
-
   "frameworks": {
     "netstandard1.6": {
       "imports": "dnxcore50",
       "buildOptions": {
-        "define": [ "DOTNET" ]
+        "define": [
+          "DOTNET"
+        ]
       }
     }
   }
