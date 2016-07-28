@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -416,14 +417,31 @@ namespace TypeScripter
                 tsType = new TsGenericType(new TsName(type.Name));
             else if (type.IsGenericType() && !type.IsGenericTypeDefinition())
             {
-                var tsGenericTypeDefinition = Resolve(type.GetGenericTypeDefinition());
-                var tsGenericType = new TsGenericType(tsGenericTypeDefinition.Name);
-                foreach (var argument in type.GetGenericArguments())
+                if (type.GetGenericTypeDefinition() == typeof(Dictionary<,>))
                 {
-                    var tsArgType = this.Resolve(argument);
-                    tsGenericType.TypeArguments.Add(tsArgType);
+                    if (type.GetGenericArguments()[0] != typeof(string))
+                    {
+                        throw new NotSupportedException("We only support dictionaries with string as key");
+                    }
+
+                    // find type used for dictionary values
+                    var valueType = type.GetGenericArguments()[1];
+                    var tsArgType = this.Resolve(valueType);
+                    var inlineInterfaceType = new TsInlineInterface(new TsName("Dictionary<" + tsArgType.Name.Name + ">"));
+                    inlineInterfaceType.IndexerProperties.Add(new TsIndexerProperty(new TsName("key"), TsPrimitive.String, tsArgType));
+                    tsType = inlineInterfaceType;
                 }
-                tsType = tsGenericType;
+                else
+                {
+                    var tsGenericTypeDefinition = Resolve(type.GetGenericTypeDefinition());
+                    TsGenericType tsGenericType = new TsGenericType(tsGenericTypeDefinition.Name);
+                    foreach (var argument in type.GetGenericArguments())
+                    {
+                        var tsArgType = this.Resolve(argument);
+                        tsGenericType.TypeArguments.Add(tsArgType);
+                    }
+                    tsType = tsGenericType;
+                }
             }
             else if (type.IsArray && type.HasElementType)
             {
