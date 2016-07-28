@@ -6,7 +6,7 @@ namespace TypeScripter.Tests
     {
         public static void Main(string[] args)
         {
-            
+            NUnit.Runner.Program.Main(new[] { "TypeScripter.Tests.dll" });
         }
     }
 }
