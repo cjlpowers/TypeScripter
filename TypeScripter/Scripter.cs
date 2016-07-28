@@ -264,9 +264,9 @@ namespace TypeScripter
 			foreach (var interfaceType in type.GetInterfaces())
 				this.AddType(interfaceType);
 
-			if (type.IsGenericType)
+			if (type.IsGenericType())
 			{
-				if (type.IsGenericTypeDefinition)
+				if (type.IsGenericTypeDefinition())
 				{
 					foreach (var genericArgument in type.GetGenericArguments())
 					{
@@ -288,9 +288,9 @@ namespace TypeScripter
 			}
 
 			// resolve the base class if present
-			if (type.BaseType != null)
+			if (type.BaseType() != null)
 			{
-				var baseType = this.Resolve(type.BaseType);
+				var baseType = this.Resolve(type.BaseType());
 				if (baseType != null && baseType != TsPrimitive.Any)
 					tsInterface.BaseInterfaces.Add(baseType);
 			}
@@ -349,7 +349,7 @@ namespace TypeScripter
 			const char genericNameSymbol = '`';
 
 			var typeName = type.Name;
-			if (type.IsGenericType)
+			if (type.IsGenericType())
 			{
 				if (typeName.Contains(genericNameSymbol))
 					typeName = typeName.Substring(0, typeName.IndexOf(genericNameSymbol));
@@ -408,13 +408,13 @@ namespace TypeScripter
             TsType tsType;
             if (this.TypeLookup.TryGetValue(type, out tsType))
                 return tsType;
-            else if (this.AssemblyFilter != null && !this.AssemblyFilter(type.Assembly)) // should this assembly be considered?
+            else if (this.AssemblyFilter != null && !this.AssemblyFilter(type.Assembly())) // should this assembly be considered?
                 tsType = TsPrimitive.Any;
             else if (this.TypeFilter != null && !this.TypeFilter(type)) // should this assembly be considered?
                 tsType = TsPrimitive.Any;
             else if (type.IsGenericParameter)
                 tsType = new TsGenericType(new TsName(type.Name));
-            else if (type.IsGenericType && !type.IsGenericTypeDefinition)
+            else if (type.IsGenericType() && !type.IsGenericTypeDefinition())
             {
                 var tsGenericTypeDefinition = Resolve(type.GetGenericTypeDefinition());
                 var tsGenericType = new TsGenericType(tsGenericTypeDefinition.Name);
@@ -430,11 +430,11 @@ namespace TypeScripter
                 var elementType = this.Resolve(type.GetElementType());
                 tsType = new TsArray(elementType, type.GetArrayRank());
             }
-            else if (type.IsEnum)
+            else if (type.IsEnum())
                 tsType = GenerateEnum(type);
-            else if (type.IsAnsiClass)
+            else if (type.IsAnsiClass())
                 tsType = GenerateInterface(type);
-            else if (type.IsInterface)
+            else if (type.IsInterface())
                 tsType = GenerateInterface(type);
             else
                 tsType = TsPrimitive.Any;

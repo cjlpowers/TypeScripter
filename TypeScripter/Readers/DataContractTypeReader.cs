@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if !DOTNET
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
@@ -10,6 +11,7 @@ using TypeScripter.TypeScript;
 
 namespace TypeScripter.Readers
 {
+
 	/// <summary>
 	/// A TypeReader implementation which processes types decorated with [DataContract] and members marked with [DataMember]
 	/// </summary>
@@ -40,4 +42,6 @@ namespace TypeScripter.Readers
 		}
 		#endregion
 	}
+
 }
+#endif

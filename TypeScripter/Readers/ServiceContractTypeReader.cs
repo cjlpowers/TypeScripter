@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
+#if !DOTNET
 using System.ServiceModel;
+#endif
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,13 +12,15 @@ using TypeScripter.TypeScript;
 
 namespace TypeScripter.Readers
 {
-	/// <summary>
-	/// A TypeReader implementation which processes types and methods decorated with [ServiceContract] and [ServiceOperation] respectively.
-	/// </summary>
-	/// <remarks>This class is useful when you want to generate TypeScript definitions for WCF Services.</remarks>
-	public class ServiceContractTypeReader : TypeReader
+#if !DOTNET
+
+    /// <summary>
+    /// A TypeReader implementation which processes types and methods decorated with [ServiceContract] and [ServiceOperation] respectively.
+    /// </summary>
+    /// <remarks>This class is useful when you want to generate TypeScript definitions for WCF Services.</remarks>
+    public class ServiceContractTypeReader : TypeReader
 	{
-		#region Methods
+        #region Methods
 		private bool IsServiceContract(Type type)
 		{
 			return type.GetCustomAttribute<ServiceContractAttribute>(true) != null;
@@ -26,9 +30,9 @@ namespace TypeScripter.Readers
 		{
 			return method.GetCustomAttribute<OperationContractAttribute>(true) != null;
 		}
-		#endregion
+        #endregion
 
-		#region ITypeReader
+        #region ITypeReader
 		public override IEnumerable<Type> GetTypes(Assembly assembly)
 		{
 			return base.GetTypes(assembly)
@@ -52,6 +56,7 @@ namespace TypeScripter.Readers
 				return new ParameterInfo[0];
 			return base.GetParameters(method);
 		}
-		#endregion
+#endregion
 	}
+#endif
 }
