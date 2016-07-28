@@ -21,6 +21,12 @@ namespace TypeScripter.TypeScript
 			private set;
 		}
 
+	    public IList<TsIndexerProperty> IndexerProperties
+	    {
+	        get;
+	        private set;
+	    }
+
 		/// <summary>
 		/// The interface functions
 		/// </summary>
@@ -60,6 +66,7 @@ namespace TypeScripter.TypeScript
 			this.TypeParameters = new List<TsTypeParameter>();
 			this.BaseInterfaces = new List<TsType>();
 			this.Properties = new List<TsProperty>();
+            this.IndexerProperties = new List<TsIndexerProperty>();
 			this.Functions = new List<TsFunction>();
 		}
 		#endregion

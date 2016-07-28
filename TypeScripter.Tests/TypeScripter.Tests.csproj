@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyTest.cs" />
+    <Compile Include="Dictionaries.cs" />
     <Compile Include="Fields.cs" />
     <Compile Include="InheritanceTest.cs" />
     <Compile Include="GenericsTest.cs" />
