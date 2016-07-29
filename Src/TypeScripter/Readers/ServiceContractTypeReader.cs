@@ -30,18 +30,18 @@ namespace TypeScripter.Readers
         #endregion
 
         #region ITypeReader
-		public override IEnumerable<Type> GetTypes(Assembly assembly)
+		public override IEnumerable<TypeInfo> GetTypes(Assembly assembly)
 		{
 			return base.GetTypes(assembly)
 				.Where(IsServiceContract);
 		}
 
-		public override IEnumerable<PropertyInfo> GetProperties(Type type)
+		public override IEnumerable<PropertyInfo> GetProperties(TypeInfo type)
 		{
 			return new PropertyInfo[0];
 		}
 
-		public override IEnumerable<MethodInfo> GetMethods(Type type)
+		public override IEnumerable<MethodInfo> GetMethods(TypeInfo type)
 		{
 			return base.GetMethods(type)
 				.Where(IsOperationContract);

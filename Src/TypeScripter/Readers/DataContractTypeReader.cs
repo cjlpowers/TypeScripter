@@ -19,19 +19,19 @@ namespace TypeScripter.Readers
 	public class DataContractTypeReader : TypeReader
 	{
         #region ITypeReader
-		public override IEnumerable<Type> GetTypes(Assembly assembly)
+		public override IEnumerable<TypeInfo> GetTypes(Assembly assembly)
 		{
 			return base.GetTypes(assembly)
 				.Where(x => x.GetCustomAttribute<DataContractAttribute>(true) != null);
 		}
 
-		public override IEnumerable<PropertyInfo> GetProperties(Type type)
+		public override IEnumerable<PropertyInfo> GetProperties(TypeInfo type)
 		{
 			return base.GetProperties(type)
 				.Where(x => x.GetCustomAttribute<DataMemberAttribute>(true) != null);
 		}
 
-		public override IEnumerable<MethodInfo> GetMethods(Type type)
+		public override IEnumerable<MethodInfo> GetMethods(TypeInfo type)
 		{
 			return new MethodInfo[0];
 		}

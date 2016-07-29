@@ -23,11 +23,11 @@ namespace TypeScripter.Examples
         /// </summary>
         public class AnimalTypeReader : Readers.TypeReader
         {
-            public override IEnumerable<Type> GetTypes(Assembly assembly)
+            public override IEnumerable<TypeInfo> GetTypes(Assembly assembly)
             {
                 return base.GetTypes(assembly)
-                    .Where(x => x.GetTypeInfo().IsSubclassOf(typeof(Animal)))
-                    .Where(x => !x.GetTypeInfo().IsAbstract);
+                    .Where(x => x.IsSubclassOf(typeof(Animal)))
+                    .Where(x => !x.IsAbstract);
             }
         }
 

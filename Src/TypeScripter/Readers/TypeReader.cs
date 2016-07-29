@@ -19,10 +19,11 @@ namespace TypeScripter.Readers
 		/// </summary>
 		/// <param name="assembly">The assembly</param>
 		/// <returns>The list of types</returns>
-		public virtual IEnumerable<Type> GetTypes(Assembly assembly)
+		public virtual IEnumerable<TypeInfo> GetTypes(Assembly assembly)
 		{
 			return assembly.GetExportedTypes()
-				.Where(x => x.GetTypeInfo().IsPublic)
+                .Select(x=>x.GetTypeInfo())
+				.Where(x => x.IsPublic)
 				.Where(x => !x.IsPointer);
 		}
 
@@ -31,9 +32,9 @@ namespace TypeScripter.Readers
 		/// </summary>
 		/// <param name="type">The type</param>
 		/// <returns>The fields</returns>
-		public virtual IEnumerable<FieldInfo> GetFields(Type type)
+		public virtual IEnumerable<FieldInfo> GetFields(TypeInfo type)
 		{
-			return type.GetTypeInfo().GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+			return type.GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
 		}
 
 		/// <summary>
@@ -41,9 +42,9 @@ namespace TypeScripter.Readers
 		/// </summary>
 		/// <param name="type">The type</param>
 		/// <returns>The properties</returns>
-		public virtual IEnumerable<PropertyInfo> GetProperties(Type type)
+		public virtual IEnumerable<PropertyInfo> GetProperties(TypeInfo type)
 		{
-			return type.GetTypeInfo().GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+			return type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
 				.Where(x => !x.PropertyType.IsPointer)
 				.Where(x => !x.IsSpecialName);
 		}
@@ -53,9 +54,9 @@ namespace TypeScripter.Readers
 		/// </summary>
 		/// <param name="type">The type</param>
 		/// <returns>The methods</returns>
-		public virtual IEnumerable<MethodInfo> GetMethods(Type type)
+		public virtual IEnumerable<MethodInfo> GetMethods(TypeInfo type)
 		{
-			return type.GetTypeInfo().GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+			return type.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
 				.Where(x => !x.GetParameters().Any(y => y.ParameterType.IsByRef))
 				.Where(x => !x.GetParameters().Any(y => y.ParameterType.IsPointer))
 				.Where(x => !x.ReturnType.IsPointer)

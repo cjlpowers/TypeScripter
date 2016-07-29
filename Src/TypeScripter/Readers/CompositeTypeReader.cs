@@ -30,21 +30,21 @@ namespace TypeScripter.Readers
 		#endregion
 
 		#region ITypeReader
-		public override IEnumerable<Type> GetTypes(Assembly assembly)
+		public override IEnumerable<TypeInfo> GetTypes(Assembly assembly)
 		{
 			return this.Readers
 				.SelectMany(x => x.GetTypes(assembly))
 				.Distinct();
 		}
 
-		public override IEnumerable<PropertyInfo> GetProperties(Type type)
+		public override IEnumerable<PropertyInfo> GetProperties(TypeInfo type)
 		{
 			return this.Readers
 				.SelectMany(x => x.GetProperties(type))
 				.Distinct();
 		}
 
-		public override IEnumerable<MethodInfo> GetMethods(Type type)
+		public override IEnumerable<MethodInfo> GetMethods(TypeInfo type)
 		{
 			return this.Readers
 				.SelectMany(x => x.GetMethods(type))
