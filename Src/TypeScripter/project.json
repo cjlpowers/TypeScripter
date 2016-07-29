@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "0.5.0-*",
   "title": "TypeScripter",
   "description": "TypeScripter is a .NET class library used to generate TypeScript definitions for .NET types.",
@@ -37,5 +37,8 @@
         ]
       }
     }
+  },
+  "buildOptions": {
+    "xmlDoc": true
   }
 }
