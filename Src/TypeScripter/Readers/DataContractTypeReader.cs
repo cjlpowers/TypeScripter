@@ -1,4 +1,4 @@
-﻿#if !DOTNET
+﻿#if (NETCLR || NET45)
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -18,7 +18,7 @@ namespace TypeScripter.Readers
 	/// <remarks>This class is useful when you want to generate TypeScript definitions for types used with WCF services.</remarks>
 	public class DataContractTypeReader : TypeReader
 	{
-		#region ITypeReader
+        #region ITypeReader
 		public override IEnumerable<Type> GetTypes(Assembly assembly)
 		{
 			return base.GetTypes(assembly)
@@ -40,7 +40,7 @@ namespace TypeScripter.Readers
 		{
 			return new ParameterInfo[0];
 		}
-		#endregion
+        #endregion
 	}
 
 }

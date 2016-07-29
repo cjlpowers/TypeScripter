@@ -1,10 +1,9 @@
-﻿using System;
+﻿#if NETCLR
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
-#if !DOTNET
 using System.ServiceModel;
-#endif
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,8 +11,6 @@ using TypeScripter.TypeScript;
 
 namespace TypeScripter.Readers
 {
-#if !DOTNET
-
     /// <summary>
     /// A TypeReader implementation which processes types and methods decorated with [ServiceContract] and [ServiceOperation] respectively.
     /// </summary>
@@ -58,5 +55,5 @@ namespace TypeScripter.Readers
 		}
 #endregion
 	}
-#endif
 }
+#endif

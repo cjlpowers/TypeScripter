@@ -38,7 +38,7 @@ namespace TypeScripter.Tests
 		#endregion
 
 		[Test]
-		public void GenericClassTest()
+		public void CanOutputGenericTypes()
 		{
 			var output = new StringBuilder();
 			output.Append(
@@ -53,7 +53,7 @@ namespace TypeScripter.Tests
 		}
 
 		[Test]
-		public void GenericMethodTest()
+		public void CanOutputGenericMethods()
 		{
 			var output = new StringBuilder();
 			output.Append(

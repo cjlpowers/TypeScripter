@@ -16,7 +16,7 @@ namespace TypeScripter.Tests
 	public class AssemblyTest : Test
 	{
 		[Test]
-		public void AddTypesFromAssemblyTest()
+		public void CanOutputTypesFromAssembly()
 		{
 			var assemlby = this.GetType().Assembly();
 
@@ -28,7 +28,7 @@ namespace TypeScripter.Tests
 			);
 			output.AppendLine();
 			output.AppendLine("var assemblyTest: TypeScripter.Tests.AssemblyTest;");
-			output.AppendLine("assemblyTest.AddTypesFromAssemblyTest();");
+			output.AppendLine("assemblyTest.CanOutputTypesFromAssembly();");
 
 			ValidateTypeScript(output);
 		}

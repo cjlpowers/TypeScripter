@@ -34,7 +34,7 @@ namespace TypeScripter.Tests
 		#endregion
 
 		[Test]
-		public void SimpleInheritanceTest()
+		public void CanOutputDerivedTypes()
 		{
 			var output = new StringBuilder();
 			output.Append(

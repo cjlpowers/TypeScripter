@@ -1,46 +1,38 @@
-﻿using NUnit.Framework;
+﻿using System.Text;
+using NUnit.Framework;
 using TypeScripter.Tests;
 
-namespace TypeScripter.Fields
+namespace TypeScripter.Tests
 {
-	#region Example Constructs
-	public class Elephant
-	{
-		public readonly string Name;
-		public readonly int Age;
-
-		public Elephant(string name, int age)
-		{
-			this.Name = name;
-			this.Age = age;
-		}
-
-	}
-	#endregion
-
 	[TestFixture]
-	public class ReadonlyFieldsUsage : Test
+	public class ReadonlyFieldsTest : Test
 	{
+        public class Elephant
+        {
+            public readonly string Name;
+            public readonly int Age;
+
+            public Elephant(string name, int age)
+            {
+                this.Name = name;
+                this.Age = age;
+            }
+        }
+
 		[Test]
-		public void OutputTest()
+		public void CanOutputReadOnlyFields()
 		{
-			var scripter = new TypeScripter.Scripter();
-			var output = scripter
-				.AddType(typeof(Elephant))
-				.ToString();
+            var output = new StringBuilder();
+            output.Append(
+                new TypeScripter.Scripter()
+                    .AddType(typeof(Elephant))
+            );
 
-			ValidateTypeScript(output);
-		}
+            output.AppendLine();
+            output.AppendLine("var elephant: TypeScripter.Tests.Elephant;");
+            output.AppendLine("var name: string = elephant.Name;");
 
-		[Test]
-		public void TestThatFieldIsRendered()
-		{
-			var scripter = new TypeScripter.Scripter();
-			var output = scripter
-				.AddType(typeof(Elephant))
-				.ToString();
-
-			Assert.True(output.Contains("Name"));
+            ValidateTypeScript(output);
 		}
 	}
 }
