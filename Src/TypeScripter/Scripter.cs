@@ -261,17 +261,17 @@ namespace TypeScripter
             this.AddType(tsInterface, type);
 
 			// resolve interfaces implemented by the type
-			foreach (var interfaceType in type.GetInterfaces())
+			foreach (var interfaceType in type.GetTypeInfo().GetInterfaces())
 				this.AddType(interfaceType);
 
-			if (type.IsGenericType())
+			if (type.GetTypeInfo().IsGenericType)
 			{
-				if (type.IsGenericTypeDefinition())
+				if (type.GetTypeInfo().IsGenericTypeDefinition)
 				{
-					foreach (var genericArgument in type.GetGenericArguments())
+					foreach (var genericArgument in type.GetTypeInfo().GetGenericArguments())
 					{
 						var tsTypeParameter = new TsTypeParameter(new TsName(genericArgument.Name));
-						var genericArgumentType = genericArgument.GetGenericParameterConstraints().FirstOrDefault();
+						var genericArgumentType = genericArgument.GetTypeInfo().GetGenericParameterConstraints().FirstOrDefault();
 						if (genericArgumentType != null)
 						{
 							var tsTypeParameterType = Resolve(genericArgumentType);
@@ -288,9 +288,9 @@ namespace TypeScripter
 			}
 
 			// resolve the base class if present
-			if (type.BaseType() != null)
+			if (type.GetTypeInfo().BaseType != null)
 			{
-				var baseType = this.Resolve(type.BaseType());
+				var baseType = this.Resolve(type.GetTypeInfo().BaseType);
 				if (baseType != null && baseType != TsPrimitive.Any)
 					tsInterface.BaseInterfaces.Add(baseType);
 			}
@@ -329,8 +329,8 @@ namespace TypeScripter
 		/// <returns>The resulting TypeScrpt enum</returns>
 		private TsEnum GenerateEnum(Type type)
 		{
-			var names = type.GetEnumNames();
-			var values = type.GetEnumValues();
+			var names = type.GetTypeInfo().GetEnumNames();
+			var values = type.GetTypeInfo().GetEnumValues();
 			var entries = new Dictionary<string, long?>();
 			for (int i = 0; i < values.Length; i++)
 				entries.Add(names[i], Convert.ToInt64(values.GetValue(i)));
@@ -349,7 +349,7 @@ namespace TypeScripter
 			const char genericNameSymbol = '`';
 
 			var typeName = type.Name;
-			if (type.IsGenericType())
+			if (type.GetTypeInfo().IsGenericType)
 			{
 				if (typeName.Contains(genericNameSymbol))
 					typeName = typeName.Substring(0, typeName.IndexOf(genericNameSymbol));
@@ -408,17 +408,17 @@ namespace TypeScripter
             TsType tsType;
             if (this.TypeLookup.TryGetValue(type, out tsType))
                 return tsType;
-            else if (this.AssemblyFilter != null && !this.AssemblyFilter(type.Assembly())) // should this assembly be considered?
+            else if (this.AssemblyFilter != null && !this.AssemblyFilter(type.GetTypeInfo().Assembly)) // should this assembly be considered?
                 tsType = TsPrimitive.Any;
             else if (this.TypeFilter != null && !this.TypeFilter(type)) // should this assembly be considered?
                 tsType = TsPrimitive.Any;
             else if (type.IsGenericParameter)
                 tsType = new TsGenericType(new TsName(type.Name));
-            else if (type.IsGenericType() && !type.IsGenericTypeDefinition())
+            else if (type.GetTypeInfo().IsGenericType && !type.GetTypeInfo().IsGenericTypeDefinition)
             {
                 var tsGenericTypeDefinition = Resolve(type.GetGenericTypeDefinition());
                 var tsGenericType = new TsGenericType(tsGenericTypeDefinition.Name);
-                foreach (var argument in type.GetGenericArguments())
+                foreach (var argument in type.GetTypeInfo().GetGenericArguments())
                 {
                     var tsArgType = this.Resolve(argument);
                     tsGenericType.TypeArguments.Add(tsArgType);
@@ -430,11 +430,11 @@ namespace TypeScripter
                 var elementType = this.Resolve(type.GetElementType());
                 tsType = new TsArray(elementType, type.GetArrayRank());
             }
-            else if (type.IsEnum())
+            else if (type.GetTypeInfo().IsEnum)
                 tsType = GenerateEnum(type);
-            else if (type.IsAnsiClass())
+            else if (type.GetTypeInfo().IsAnsiClass)
                 tsType = GenerateInterface(type);
-            else if (type.IsInterface())
+            else if (type.GetTypeInfo().IsInterface)
                 tsType = GenerateInterface(type);
             else
                 tsType = TsPrimitive.Any;

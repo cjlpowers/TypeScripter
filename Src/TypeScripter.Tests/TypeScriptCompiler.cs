@@ -106,6 +106,6 @@ namespace TypeScripter.Tests
 				System.IO.File.Delete(tempFile);
 			}
 		}
-#endregion
+        #endregion
 	}
 }

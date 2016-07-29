@@ -34,7 +34,7 @@ namespace TypeScripter.Examples
         [Test]
         public void TypeReaderExample()
         {
-            var assembly = this.GetType().Assembly();
+            var assembly = this.GetType().GetTypeInfo().Assembly;
             var scripter = new Scripter();
             var output = scripter
                 .UsingTypeReader(

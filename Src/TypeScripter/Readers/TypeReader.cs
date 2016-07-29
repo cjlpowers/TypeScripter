@@ -22,7 +22,7 @@ namespace TypeScripter.Readers
 		public virtual IEnumerable<Type> GetTypes(Assembly assembly)
 		{
 			return assembly.GetExportedTypes()
-				.Where(x => x.IsPublic())
+				.Where(x => x.GetTypeInfo().IsPublic)
 				.Where(x => !x.IsPointer);
 		}
 
@@ -33,7 +33,7 @@ namespace TypeScripter.Readers
 		/// <returns>The fields</returns>
 		public virtual IEnumerable<FieldInfo> GetFields(Type type)
 		{
-			return type.GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+			return type.GetTypeInfo().GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
 		}
 
 		/// <summary>
@@ -43,7 +43,7 @@ namespace TypeScripter.Readers
 		/// <returns>The properties</returns>
 		public virtual IEnumerable<PropertyInfo> GetProperties(Type type)
 		{
-			return type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+			return type.GetTypeInfo().GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
 				.Where(x => !x.PropertyType.IsPointer)
 				.Where(x => !x.IsSpecialName);
 		}
@@ -55,7 +55,7 @@ namespace TypeScripter.Readers
 		/// <returns>The methods</returns>
 		public virtual IEnumerable<MethodInfo> GetMethods(Type type)
 		{
-			return type.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+			return type.GetTypeInfo().GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
 				.Where(x => !x.GetParameters().Any(y => y.ParameterType.IsByRef))
 				.Where(x => !x.GetParameters().Any(y => y.ParameterType.IsPointer))
 				.Where(x => !x.ReturnType.IsPointer)

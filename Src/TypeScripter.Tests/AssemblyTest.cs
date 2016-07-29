@@ -18,7 +18,7 @@ namespace TypeScripter.Tests
 		[Test]
 		public void CanOutputTypesFromAssembly()
 		{
-			var assemlby = this.GetType().Assembly();
+			var assemlby = this.GetType().GetTypeInfo().Assembly;
 
 			var output = new StringBuilder();
 			output.Append(

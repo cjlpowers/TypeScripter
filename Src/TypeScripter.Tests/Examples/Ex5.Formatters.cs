@@ -45,7 +45,7 @@ namespace TypeScripter.Examples
         [Test]
         public void FormatterExample()
         {
-            var assembly = this.GetType().Assembly();
+            var assembly = this.GetType().Assembly;
             var scripter = new Scripter();
             var output = scripter
                 .UsingTypeReader(
