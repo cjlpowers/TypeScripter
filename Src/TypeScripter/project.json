@@ -1,5 +1,5 @@
 ﻿{
-  "version": "1.0.0-*",
+  "version": "0.5.0-*",
   "title": "TypeScripter",
   "description": "TypeScripter is a .NET class library used to generate TypeScript definitions for .NET types.",
   "language": "en-US",
@@ -30,13 +30,7 @@
     }
   },
   "frameworks": {
-	"net45": {
-      "frameworkAssemblies": {
-        "System.Runtime.Serialization": "",
-      }
-    },
     "netstandard1.6": {
-      "imports": "dnxcore50",
       "buildOptions": {
         "define": [
           "DOTNET"
