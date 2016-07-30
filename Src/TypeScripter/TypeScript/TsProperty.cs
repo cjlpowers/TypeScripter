@@ -9,40 +9,40 @@ namespace TypeScripter.TypeScript
     /// <summary>
     /// A class representing a TypeScript property
     /// </summary>
-	public class TsProperty : TsObject
-	{
-		#region Properties
+    public class TsProperty : TsObject
+    {
+        #region Properties
         /// <summary>
         /// A flag which indicates the property is optional
         /// </summary>
-		public bool Optional
-		{
-			get;
-			set;
-		}
+        public bool Optional
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// The property type
         /// </summary>
-		public TsType Type
-		{
-			get;
-			set;
-		}
-		#endregion
+        public TsType Type
+        {
+            get;
+            set;
+        }
+        #endregion
 
-		#region Creation
-		/// <summary>
-		/// Constructor
-		/// </summary>
-		/// <param name="name">The interface name</param>
+        #region Creation
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">The interface name</param>
         /// <param name="type">The type name</param>
-		public TsProperty(TsName name, TsType type)
-			: base(name)
-		{
-			this.Type = type;
-			this.Optional = false;
-		}
-		#endregion
-	}
+        public TsProperty(TsName name, TsType type)
+            : base(name)
+        {
+            this.Type = type;
+            this.Optional = false;
+        }
+        #endregion
+    }
 }

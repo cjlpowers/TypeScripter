@@ -4,9 +4,9 @@ using TypeScripter.Tests;
 
 namespace TypeScripter.Tests
 {
-	[TestFixture]
-	public class ReadonlyFieldsTest : Test
-	{
+    [TestFixture]
+    public class ReadonlyFieldsTest : Test
+    {
         public class Elephant
         {
             public readonly string Name;
@@ -19,9 +19,9 @@ namespace TypeScripter.Tests
             }
         }
 
-		[Test]
-		public void CanOutputReadOnlyFields()
-		{
+        [Test]
+        public void CanOutputReadOnlyFields()
+        {
             var output = new StringBuilder();
             output.Append(
                 new TypeScripter.Scripter()
@@ -33,7 +33,7 @@ namespace TypeScripter.Tests
             output.AppendLine("var name: string = elephant.Name;");
 
             ValidateTypeScript(output);
-		}
-	}
+        }
+    }
 }
 

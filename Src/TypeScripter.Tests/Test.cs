@@ -12,27 +12,27 @@ using TypeScripter.Readers;
 
 namespace TypeScripter.Tests
 {
-	/// <summary>
-	/// The base class for TypeScripter tests
-	/// </summary>
-	public abstract class Test
-	{
-		protected void ValidateTypeScript(Scripter scripter)
-		{
-			ValidateTypeScript(scripter.ToString());
-		}
+    /// <summary>
+    /// The base class for TypeScripter tests
+    /// </summary>
+    public abstract class Test
+    {
+        protected void ValidateTypeScript(Scripter scripter)
+        {
+            ValidateTypeScript(scripter.ToString());
+        }
 
-		protected void ValidateTypeScript(string typeScript)
-		{
-			Console.WriteLine(typeScript);
-			var result = TypeScriptCompiler.Compile(typeScript);
-			Assert.AreEqual(0, result.ReturnCode, result.Output);
-		}
+        protected void ValidateTypeScript(string typeScript)
+        {
+            Console.WriteLine(typeScript);
+            var result = TypeScriptCompiler.Compile(typeScript);
+            Assert.AreEqual(0, result.ReturnCode, result.Output);
+        }
 
-		protected void ValidateTypeScript(StringBuilder typeScript)
-		{
-			ValidateTypeScript(typeScript.ToString());
-		}
-	}
+        protected void ValidateTypeScript(StringBuilder typeScript)
+        {
+            ValidateTypeScript(typeScript.ToString());
+        }
+    }
 }
 
