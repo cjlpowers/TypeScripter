@@ -7,6 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TypeScripter", "TypeScripte
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TypeScripter.Tests", "TypeScripter.Tests\TypeScripter.Tests.csproj", "{EAA005D3-AADA-49E1-B45E-A7F99EA80DBB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{53C7DF6C-53E9-444E-8CEF-D80950412C76}"
+	ProjectSection(SolutionItems) = preProject
+		..\Build\TypeScripter.nuspec = ..\Build\TypeScripter.nuspec
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
