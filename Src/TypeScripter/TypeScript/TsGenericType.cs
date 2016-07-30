@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace TypeScripter.TypeScript
 {
+    /// <summary>
+    /// A class representing a generic TypeScript type
+    /// </summary>
 	public sealed class TsGenericType : TsType
 	{
 		#region Properties
@@ -20,6 +23,10 @@ namespace TypeScripter.TypeScript
 		#endregion
 
 		#region Creation
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="name">The name of the type</param>
 		public TsGenericType(TsName name)
 			: base(name)
 		{

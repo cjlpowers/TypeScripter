@@ -89,6 +89,9 @@ namespace TypeScripter.TypeScript
 			set;
 		}
 
+        /// <summary>
+        /// The mapping of reserved words
+        /// </summary>
 		public IDictionary<string, string> ReservedWordsMapping
 		{
 			get;
@@ -97,6 +100,9 @@ namespace TypeScripter.TypeScript
 		#endregion
 
 		#region Creation
+        /// <summary>
+        /// Constructor
+        /// </summary>
 		public TsFormatter()
 		{
 			this.Context = new StringBuilderContext(this);
@@ -108,6 +114,11 @@ namespace TypeScripter.TypeScript
 		#endregion
 
 		#region Writer
+        /// <summary>
+        /// Formats a module
+        /// </summary>
+        /// <param name="module">The module</param>
+        /// <returns>The string representation of the module</returns>
 		public virtual string Format(TsModule module)
 		{
 			using (var sbc = new StringBuilderContext(this))
@@ -129,6 +140,11 @@ namespace TypeScripter.TypeScript
 			}
 		}
 
+        /// <summary>
+        /// Formats an interface
+        /// </summary>
+        /// <param name="tsInterface">The interface</param>
+        /// <returns>The string representation of the interface</returns>
 		public virtual string Format(TsInterface tsInterface)
 		{
 			using (var sbc = new StringBuilderContext(this))
@@ -155,6 +171,11 @@ namespace TypeScripter.TypeScript
 			}
 		}
 
+        /// <summary>
+        /// Formats a property
+        /// </summary>
+        /// <param name="property">The property</param>
+        /// <returns>The string representation of the property</returns>
 		public virtual string Format(TsProperty property)
 		{
 			using (var sbc = new StringBuilderContext(this))
@@ -166,6 +187,11 @@ namespace TypeScripter.TypeScript
 			}
 		}
 
+        /// <summary>
+        /// Formats a function
+        /// </summary>
+        /// <param name="function">The function</param>
+        /// <returns>The string representation of the function</returns>
 		public virtual string Format(TsFunction function)
 		{
 			using (var sbc = new StringBuilderContext(this))
@@ -182,11 +208,21 @@ namespace TypeScripter.TypeScript
 			}
 		}
 
+        /// <summary>
+        /// Formats a return type
+        /// </summary>
+        /// <param name="tsReturnType">The return type</param>
+        /// <returns>The string representation of the return type</returns>
 		public virtual string FormatReturnType(TsType tsReturnType)
 		{
 			return Format(tsReturnType);
 		}
 
+        /// <summary>
+        /// Formats a type
+        /// </summary>
+        /// <param name="tsType">The type</param>
+        /// <returns>The string representation of the type</returns>
 		public virtual string Format(TsType tsType)
 		{
 			if (tsType is TsGenericType)
@@ -194,6 +230,11 @@ namespace TypeScripter.TypeScript
 			return tsType.Name.FullName;
 		}
 
+        /// <summary>
+        /// Formats an enumeration
+        /// </summary>
+        /// <param name="tsEnum">The enumeration</param>
+        /// <returns>The string representation of the enumeration</returns>
 		public virtual string Format(TsEnum tsEnum)
 		{
 			using (var sbc = new StringBuilderContext(this))
@@ -223,6 +264,11 @@ namespace TypeScripter.TypeScript
 			}
 		}
 
+        /// <summary>
+        /// Formats a parameter
+        /// </summary>
+        /// <param name="parameter">The parameter</param>
+        /// <returns>The string representation of a parameter</returns>
 		public virtual string Format(TsParameter parameter)
 		{
 			using (var sbc = new StringBuilderContext(this))
@@ -232,16 +278,31 @@ namespace TypeScripter.TypeScript
 			}
 		}
 
+        /// <summary>
+        /// Formats a set of parameters
+        /// </summary>
+        /// <param name="parameters">The parameters</param>
+        /// <returns>The string representation of the parameters</returns>
 		public virtual string Format(IEnumerable<TsParameter> parameters)
 		{
 			return string.Join(", ", parameters.Select(Format));
 		}
 
+        /// <summary>
+        /// Formats a type parameter
+        /// </summary>
+        /// <param name="typeParameter">The type parameter</param>
+        /// <returns>The string representaton of the type parameter</returns>
 		public virtual string Format(TsTypeParameter typeParameter)
 		{
 			return string.Format("{0}{1}", typeParameter.Name, typeParameter.Extends == null ? string.Empty : string.Format(" extends {0}", typeParameter.Extends.FullName));
 		}
 
+        /// <summary>
+        /// Formats a set of type parameters
+        /// </summary>
+        /// <param name="typeParameters">The type parameters</param>
+        /// <returns>The string representation fo the type parameters</returns>
 		public virtual string Format(IEnumerable<TsTypeParameter> typeParameters)
 		{
 			if (typeParameters.Count() == 0)
@@ -249,11 +310,21 @@ namespace TypeScripter.TypeScript
 			return string.Format("<{0}>", string.Join(", ", typeParameters.Select(Format)));
 		}
 
+        /// <summary>
+        /// Formats a generic type
+        /// </summary>
+        /// <param name="tsGenericType">The generic type</param>
+        /// <returns>The string representation of the generic type</returns>
 		public virtual string Format(TsGenericType tsGenericType)
 		{
 			return string.Format("{0}{1}", tsGenericType.Name.FullName, tsGenericType.TypeArguments.Count > 0 ? string.Format("<{0}>", string.Join(", ", tsGenericType.TypeArguments.Select(Format))) : string.Empty);
 		}
 
+        /// <summary>
+        /// Formats a name
+        /// </summary>
+        /// <param name="name">The name</param>
+        /// <returns>The string representation of the name</returns>
 		public virtual string Format(TsName name)
 		{
 			if (name == null || name.Name == null)

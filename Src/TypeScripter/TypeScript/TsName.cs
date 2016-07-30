@@ -6,21 +6,33 @@ using System.Threading.Tasks;
 
 namespace TypeScripter.TypeScript
 {
+    /// <summary>
+    /// A class representing a TypeScript name
+    /// </summary>
 	public class TsName : IComparable<TsName>
 	{
 		#region Properties
+        /// <summary>
+        /// The namespace
+        /// </summary>
 		public string Namespace
 		{
 			get;
 			set;
 		}
 
+        /// <summary>
+        /// The name
+        /// </summary>
 		public string Name
 		{
 			get;
 			set;
 		}
 
+        /// <summary>
+        /// The full name including namespace
+        /// </summary>
 		public string FullName
 		{
 			get
@@ -34,11 +46,20 @@ namespace TypeScripter.TypeScript
 		#endregion
 
 		#region Creation
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="tsName">The name</param>
 		public TsName(string tsName)
 		{
 			this.Name = tsName;
 		}
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="tsName">The name</param>
+        /// <param name="tsNamespace">The namespace</param>
 		public TsName(string tsName, string tsNamespace)
 			: this(tsName)
 		{
@@ -47,6 +68,10 @@ namespace TypeScripter.TypeScript
 		#endregion
 
 		#region Methods
+        /// <summary>
+        /// The ToString implementation
+        /// </summary>
+        /// <returns>The string representation</returns>
 		public override string ToString()
 		{
 			return this.FullName;
@@ -54,6 +79,11 @@ namespace TypeScripter.TypeScript
 		#endregion
 
         #region IComparable<TsName> Members
+        /// <summary>
+        /// Compares this instance to another TsName
+        /// </summary>
+        /// <param name="other">The other TsName</param>
+        /// <returns>The comparison result</returns>
         public int CompareTo(TsName other)
         {
             return this.FullName.CompareTo(other.FullName);

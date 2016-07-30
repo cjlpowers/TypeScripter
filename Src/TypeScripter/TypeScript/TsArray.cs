@@ -6,9 +6,17 @@ using System.Threading.Tasks;
 
 namespace TypeScripter.TypeScript
 {
+    /// <summary>
+    /// A class representing a TypeScript Array
+    /// </summary>
 	public sealed class TsArray : TsPrimitive
 	{
 		#region Creation
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="elementType">The element type</param>
+        /// <param name="dimensions">The dimensions</param>
 		public TsArray(TsType elementType, int dimensions)
 			: base(new TsName(elementType.Name.Name + GenerateArrayNotation(dimensions), elementType.Name.Namespace))
 		{

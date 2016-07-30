@@ -13,6 +13,9 @@ namespace TypeScripter.TypeScript
 	public abstract class TsObject
 	{
 		#region Properties
+        /// <summary>
+        /// The name of the type
+        /// </summary>
 		public TsName Name
 		{
 			get;
@@ -24,7 +27,7 @@ namespace TypeScripter.TypeScript
 		/// <summary>
 		/// Constructor
 		/// </summary>
-		/// <param name="name">The name of the object</param>
+		/// <param name="name">The name of the type</param>
 		protected TsObject(TsName name)
 		{
 			this.Name = name;
@@ -32,6 +35,10 @@ namespace TypeScripter.TypeScript
 		#endregion
 
 		#region Methods
+        /// <summary>
+        /// The ToString implementation
+        /// </summary>
+        /// <returns>The string representation</returns>
 		public override string ToString()
 		{
 			var name = this.Name;

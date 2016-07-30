@@ -6,9 +6,15 @@ using System.Threading.Tasks;
 
 namespace TypeScripter.TypeScript
 {
+    /// <summary>
+    /// A class representing a TypeScript enumeration
+    /// </summary>
 	public sealed class TsEnum : TsType
 	{
 		#region Properties
+        /// <summary>
+        /// The enumeration values
+        /// </summary>
 		public IDictionary<string, long?> Values
 		{
 			get;

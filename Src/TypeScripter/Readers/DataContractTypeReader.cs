@@ -18,25 +18,56 @@ namespace TypeScripter.Readers
 	/// <remarks>This class is useful when you want to generate TypeScript definitions for types used with WCF services.</remarks>
 	public class DataContractTypeReader : TypeReader
 	{
-        #region ITypeReader
+        #region TypeReader
+        /// <summary>
+		/// Gets types from an assembly that are marked with DataContractAttribute
+		/// </summary>
+		/// <param name="assembly">The assembly</param>
+		/// <returns>The list of types</returns>
 		public override IEnumerable<TypeInfo> GetTypes(Assembly assembly)
 		{
 			return base.GetTypes(assembly)
 				.Where(x => x.GetCustomAttribute<DataContractAttribute>(true) != null);
 		}
 
-		public override IEnumerable<PropertyInfo> GetProperties(TypeInfo type)
+        /// <summary>
+		/// Gets the fields defined on a particular type that are marked with DataMemberAttribute
+		/// </summary>
+		/// <param name="type">The type</param>
+		/// <returns>The fields</returns>
+		public override IEnumerable<FieldInfo> GetFields(TypeInfo type)
+        {
+            return base.GetFields(type)
+                .Where(x => x.GetCustomAttribute<DataMemberAttribute>(true) != null);
+        }
+
+        /// <summary>
+		/// Gets the properties defined on a particular type that are marked with DataMemberAttribute
+		/// </summary>
+		/// <param name="type">The type</param>
+		/// <returns>The properties</returns>
+        public override IEnumerable<PropertyInfo> GetProperties(TypeInfo type)
 		{
 			return base.GetProperties(type)
 				.Where(x => x.GetCustomAttribute<DataMemberAttribute>(true) != null);
 		}
 
+        /// <summary>
+		/// Returns an empty set of methods
+		/// </summary>
+		/// <param name="type">The type</param>
+		/// <returns>The methods</returns>
 		public override IEnumerable<MethodInfo> GetMethods(TypeInfo type)
 		{
 			return new MethodInfo[0];
 		}
 
-		public override IEnumerable<ParameterInfo> GetParameters(MethodInfo method)
+        /// <summary>
+        /// Returns an empty set of parameters
+        /// </summary>
+        /// <param name="method">The method</param>
+        /// <returns>The parameters</returns>
+        public override IEnumerable<ParameterInfo> GetParameters(MethodInfo method)
 		{
 			return new ParameterInfo[0];
 		}

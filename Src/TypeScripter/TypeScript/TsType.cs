@@ -20,10 +20,14 @@ namespace TypeScripter.TypeScript
 			: base(name)
 		{
 		}
-		#endregion
+        #endregion
 
-		#region Method
-		public override string ToString()
+        #region Method
+        /// <summary>
+        /// The ToString implementation
+        /// </summary>
+        /// <returns>The string representation</returns>
+        public override string ToString()
 		{
 			return this.Name.FullName;
 		}

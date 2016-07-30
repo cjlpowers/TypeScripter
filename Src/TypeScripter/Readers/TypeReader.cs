@@ -64,10 +64,10 @@ namespace TypeScripter.Readers
 		}
 
 		/// <summary>
-		/// Gets the parameters of a method
+		/// Gets the parameters of a particular method
 		/// </summary>
 		/// <param name="method">The method</param>
-		/// <returns></returns>
+		/// <returns>The parameters</returns>
 		public virtual IEnumerable<ParameterInfo> GetParameters(MethodInfo method)
 		{
 			return method.GetParameters()

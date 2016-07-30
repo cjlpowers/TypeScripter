@@ -11,7 +11,7 @@ using TypeScripter.Readers;
 namespace TypeScripter
 {
 	/// <summary>
-	/// A class which generates TypeScript definitions for CLR types
+	/// A class which generates TypeScript definitions for .NET types
 	/// </summary>
 	public class Scripter
 	{
@@ -46,7 +46,7 @@ namespace TypeScripter
 			set;
 		}
 
-		private TsFormatter Writer
+		private TsFormatter Formatter
 		{
 			get;
 			set;
@@ -78,7 +78,7 @@ namespace TypeScripter
 
 			// initialize the scripter with default implementations
 			this.Reader = new TypeReader();
-			this.Writer = new TsFormatter();
+			this.Formatter = new TsFormatter();
 		}
 		#endregion
 
@@ -91,7 +91,7 @@ namespace TypeScripter
 		{
 			var str = new StringBuilder();
 			foreach (var module in this.Modules())
-				str.Append(this.Writer.Format(module));
+				str.Append(this.Formatter.Format(module));
 			return str.ToString();
 		}
 		#endregion
@@ -387,7 +387,7 @@ namespace TypeScripter
 		/// </summary>
 		/// <param name="type">The type to resolve</param>
 		/// <returns>The TypeScript type definition</returns>
-        public TsType Resolve(Type type)
+        protected TsType Resolve(Type type)
         {
             // see if we have already processed the type
             TsType tsType;
@@ -504,18 +504,33 @@ namespace TypeScripter
 		#endregion
 
 		#region Output
-		public Scripter UsingFormatter(TsFormatter writer)
+        /// <summary>
+        /// Configures the scripter to use a particular formatter
+        /// </summary>
+        /// <param name="formatter">The formatter</param>
+        /// <returns></returns>
+		public Scripter UsingFormatter(TsFormatter formatter)
 		{
-			this.Writer = writer;
+			this.Formatter = formatter;
 			return this;
 		}
 
-		public Scripter SaveToFile(string path)
+        /// <summary>
+        /// Saves the scripter output to a file
+        /// </summary>
+        /// <param name="file">The file path</param>
+        /// <returns></returns>
+		public Scripter SaveToFile(string file)
 		{
-			System.IO.File.WriteAllText(path, this.ToString());
+			System.IO.File.WriteAllText(file, this.ToString());
 			return this;
 		}
 
+        /// <summary>
+        /// Saves the scripter output to a directory
+        /// </summary>
+        /// <param name="directory">The directory path</param>
+        /// <returns></returns>
 		public Scripter SaveToDirectory(string directory)
 		{
 			var includeContent = new StringBuilder();
@@ -524,7 +539,7 @@ namespace TypeScripter
 			{
 				var fileName = module.Name.FullName + ".d.ts";
 				var path = System.IO.Path.Combine(directory, fileName);
-				var output = this.Writer.Format(module);
+				var output = this.Formatter.Format(module);
 
 				System.IO.File.WriteAllText(path, includeRef + Environment.NewLine + output);
 				includeContent.AppendFormat("/// <reference path=\"{0}\" />", fileName);

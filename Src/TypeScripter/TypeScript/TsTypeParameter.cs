@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace TypeScripter.TypeScript
 {
+    /// <summary>
+    /// A class representing a TypeScript type parameter
+    /// </summary>
 	public sealed class TsTypeParameter : TsObject
 	{
 		#region Properties
