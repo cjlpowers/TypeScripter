@@ -494,6 +494,10 @@ namespace TypeScripter
         #endregion
 
         #region Modules
+        /// <summary>
+        /// Returns the list of modules associated with the current set of resolved types
+        /// </summary>
+        /// <returns>The list of modules</returns>
         public IEnumerable<TsModule> Modules()
         {
             return this.Types
