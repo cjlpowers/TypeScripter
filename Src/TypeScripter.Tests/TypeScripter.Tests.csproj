@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyTest.cs" />
+    <Compile Include="Dictionaries.cs" />
     <Compile Include="Examples\Ex5.Formatters.cs" />
     <Compile Include="Examples\Ex4.TypeReaders.cs" />
     <Compile Include="Examples\Ex3.Generics.cs" />
