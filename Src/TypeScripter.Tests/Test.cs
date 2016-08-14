@@ -33,6 +33,13 @@ namespace TypeScripter.Tests
         {
             ValidateTypeScript(typeScript.ToString());
         }
+
+        protected void AssertNotValidTypeScript(string typeScript)
+        {
+            Console.WriteLine(typeScript);
+            var result = TypeScriptCompiler.Compile(typeScript);
+            Assert.AreNotEqual(0, result.ReturnCode, result.Output);
+        }
     }
 }
 
