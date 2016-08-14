@@ -15,6 +15,8 @@ namespace TypeScripter
 
         public Dictionary<int, int> SimpleDict2 { get; set; }
 
+        public OrderDictionary SimpleDict3 { get; set; }
+
         public Order(Dictionary<string, OrderLineItem> orderLines, Dictionary<int, OrderLineItem> linesByIndex, Dictionary<string, string> simpleDict1, Dictionary<int, int> simpleDict2)
         {
             OrderLines = orderLines;
@@ -31,6 +33,9 @@ namespace TypeScripter
         public string Name { get; set; }
     }
 
+    public class OrderDictionary: Dictionary<string, Order>
+    {
+    }
     #endregion
 
     [TestFixture]
@@ -58,11 +63,14 @@ namespace TypeScripter
             // we want to descent to generic type
             Assert.True(output.Contains("OrderLineItem"));
 
+            ValidateTypeScript(output);
+
             // inline interfaces for dictionaries are generated
             Assert.True(output.Contains("LinesByIndex: {[key: number]: TypeScripter.OrderLineItem;}"));
             Assert.True(output.Contains("OrderLines: {[key: string]: TypeScripter.OrderLineItem;}"));
             Assert.True(output.Contains("SimpleDict1: {[key: string]: string;}"));
             Assert.True(output.Contains("SimpleDict2: {[key: number]: number;}"));
+            Assert.True(output.Contains("SimpleDict3: TypeScripter.OrderDictionary;"));
         }
     }
 }
