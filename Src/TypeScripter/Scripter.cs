@@ -263,7 +263,7 @@ namespace TypeScripter
             this.AddType(tsInterface, type);
 
             // resolve non-inherited interfaces implemented by the type
-            var interfaces = typeInfo.BaseType == null ? typeInfo.GetInterfaces() : typeInfo.GetInterfaces().Except(typeInfo.BaseType.GetInterfaces());
+            var interfaces = typeInfo.BaseType == null ? typeInfo.GetInterfaces() : typeInfo.GetInterfaces().Except(typeInfo.BaseType.GetTypeInfo().GetInterfaces());
             foreach (var interfaceType in interfaces)
                 this.AddType(interfaceType);
 
@@ -464,7 +464,8 @@ namespace TypeScripter
         protected virtual TsProperty Resolve(PropertyInfo property)
         {
             TsType propertyType;
-            if (property.PropertyType.IsGenericType && !property.PropertyType.IsGenericTypeDefinition && property.PropertyType.GetGenericTypeDefinition() == typeof(Dictionary<,>))
+            var propertyTypeInfo = property.PropertyType.GetTypeInfo();
+            if (propertyTypeInfo.IsGenericType && !propertyTypeInfo.IsGenericTypeDefinition && propertyTypeInfo.GetGenericTypeDefinition() == typeof(Dictionary<,>))
             {
                 // find type used for dictionary values
                 var genericArguments = property.PropertyType.GetTypeInfo().GetGenericArguments();
