@@ -76,6 +76,8 @@ namespace TypeScripter
                 { typeof(double), TsPrimitive.Number },
             };
 
+            this.RegisterTypeMapping(CreateGenericDictionaryType(), typeof(Dictionary<,>));
+
             // initialize the scripter with default implementations
             this.Reader = new TypeReader();
             this.Formatter = new TsFormatter();
@@ -569,6 +571,19 @@ namespace TypeScripter
 
             // write the include file
             return this;
+        }
+        #endregion
+
+        #region Helper Methods
+        private TsType CreateGenericDictionaryType()
+        {
+            var tsInterface = new TsInterface(new TsName("Dictionary", "System.Collections.Generic"));
+            var tsKeyType = new TsInterface(new TsName("TKey"));
+            var tsValueType = new TsInterface(new TsName("TValue"));
+            tsInterface.TypeParameters.Add(new TsTypeParameter(new TsName("Tkey")));
+            tsInterface.TypeParameters.Add(new TsTypeParameter(new TsName("TValue")));
+            tsInterface.IndexerProperties.Add(new TsIndexerProperty(new TsName("key"), TsPrimitive.String, tsValueType));
+            return tsInterface;
         }
         #endregion
     }
