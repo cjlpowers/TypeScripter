@@ -261,8 +261,9 @@ namespace TypeScripter
             var tsInterface = new TsInterface(GetName(type));
             this.AddType(tsInterface, type);
 
-            // resolve interfaces implemented by the type
-            foreach (var interfaceType in typeInfo.GetInterfaces())
+            // resolve non-inherited interfaces implemented by the type
+            var interfaces = typeInfo.BaseType == null ? typeInfo.GetInterfaces() : typeInfo.GetInterfaces().Except(typeInfo.BaseType.GetInterfaces());
+            foreach (var interfaceType in interfaces)
                 this.AddType(interfaceType);
 
             if (typeInfo.IsGenericType)
