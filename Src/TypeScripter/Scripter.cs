@@ -141,8 +141,7 @@ namespace TypeScripter
         /// <param name="type">The native type</param>
         private void RegisterTypeMapping(TsType tsType, Type type)
         {
-            if (!this.TypeLookup.ContainsKey(type))
-                this.TypeLookup.Add(type, tsType);
+            this.TypeLookup[type] = tsType;
         }
 
         /// <summary>
@@ -392,9 +391,7 @@ namespace TypeScripter
         {
             // see if we have already processed the type
             TsType tsType;
-            if (this.TypeLookup.TryGetValue(type, out tsType))
-                return tsType;
-            else
+            if (!this.TypeLookup.TryGetValue(type, out tsType))
                 tsType = OnResolve(type);
 
             this.AddType(tsType, type);
