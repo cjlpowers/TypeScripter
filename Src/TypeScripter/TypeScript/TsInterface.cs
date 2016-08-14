@@ -11,10 +11,10 @@ namespace TypeScripter.TypeScript
     /// </summary>
     public sealed class TsInterface : TsType
     {
+        #region Properties
         /// <summary>
         /// The interface properties
         /// </summary>
-        #region Properties
         public IList<TsProperty> Properties
         {
             get;
@@ -56,6 +56,17 @@ namespace TypeScripter.TypeScript
             get;
             private set;
         }
+
+        /// <summary>
+        /// A flag which indicates whether the interface is used as a object type literal
+        /// </summary>
+        public bool IsLiteral
+        {
+            get
+            {
+                return this.Name == TsName.None;
+            }
+        }
         #endregion
 
         #region Creation
@@ -71,6 +82,14 @@ namespace TypeScripter.TypeScript
             this.Properties = new List<TsProperty>();
             this.IndexerProperties = new List<TsIndexerProperty>();
             this.Functions = new List<TsFunction>();
+        }
+
+        /// <summary>
+        /// Constructs an interface to be used as a object type literal
+        /// </summary>
+        public TsInterface()
+            : this(TsName.None)
+        {
         }
         #endregion
     }

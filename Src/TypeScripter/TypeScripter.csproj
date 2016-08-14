@@ -54,7 +54,6 @@
     <Compile Include="TypeScript\TsGenericType.cs" />
     <Compile Include="TypeScript\TsFunction.cs" />
     <Compile Include="TypeScript\TsIndexerProperty.cs" />
-    <Compile Include="TypeScript\TsInlineInterface.cs" />
     <Compile Include="TypeScript\TsTypeParameter.cs" />
     <Compile Include="TypeScript\TsParameter.cs" />
     <Compile Include="TypeScript\TsName.cs" />

@@ -11,6 +11,13 @@ namespace TypeScripter.TypeScript
     /// </summary>
     public class TsName : IComparable<TsName>
     {
+        #region Constants
+        /// <summary>
+        /// A name instance represention no name
+        /// </summary>
+        public static readonly TsName None = new TsName(string.Empty);
+        #endregion
+
         #region Properties
         /// <summary>
         /// The namespace

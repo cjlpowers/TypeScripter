@@ -149,28 +149,58 @@ namespace TypeScripter.TypeScript
         {
             using (var sbc = new StringBuilderContext(this))
             {
-                this.WriteIndent();
-                this.Write("interface {0}{1} {2} {{",
-                    Format(tsInterface.Name),
-                    Format(tsInterface.TypeParameters),
-                    tsInterface.BaseInterfaces.Count > 0 ? string.Format("extends {0}", string.Join(", ", tsInterface.BaseInterfaces.OrderBy(x => x.Name).Select(Format))) : string.Empty);
-                this.WriteNewline();
-                using (Indent())
+                if (tsInterface.IsLiteral)
                 {
+                    this.Write("{");
                     foreach (var property in tsInterface.Properties.OrderBy(x => x.Name))
-                        this.Write(this.Format(property, indent: true));
+                        this.Write(this.Format(property));
 
                     foreach (var property in tsInterface.IndexerProperties.OrderBy(x => x.Name))
-                        this.Write(this.Format(property, indent: true));
+                        this.Write(this.Format(property));
 
                     foreach (var function in tsInterface.Functions.OrderBy(x => x.Name))
                         this.Write(this.Format(function));
+
+                    this.Write("}");
+                    return sbc.ToString();
                 }
-                this.WriteIndent();
-                this.Write("}");
-                this.WriteNewline();
-                this.WriteNewline();
-                return sbc.ToString();
+                else
+                {
+                    this.WriteIndent();
+                    this.Write("interface {0}{1} {2} {{",
+                        Format(tsInterface.Name),
+                        Format(tsInterface.TypeParameters),
+                        tsInterface.BaseInterfaces.Count > 0 ? string.Format("extends {0}", string.Join(", ", tsInterface.BaseInterfaces.OrderBy(x => x.Name).Select(Format))) : string.Empty);
+                    this.WriteNewline();
+                    using (Indent())
+                    {
+                        foreach (var property in tsInterface.Properties.OrderBy(x => x.Name))
+                        {
+                            this.WriteIndent();
+                            this.Write(this.Format(property));
+                            this.WriteNewline();
+                        }
+
+                        foreach (var property in tsInterface.IndexerProperties.OrderBy(x => x.Name))
+                        {
+                            this.WriteIndent();
+                            this.Write(this.Format(property));
+                            this.WriteNewline();
+                        }
+
+                        foreach (var function in tsInterface.Functions.OrderBy(x => x.Name))
+                        {
+                            this.WriteIndent();
+                            this.Write(this.Format(function));
+                            this.WriteNewline();
+                        }
+                    }
+                    this.WriteIndent();
+                    this.Write("}");
+                    this.WriteNewline();
+                    this.WriteNewline();
+                    return sbc.ToString();
+                }
             }
         }
 
@@ -179,33 +209,25 @@ namespace TypeScripter.TypeScript
         /// </summary>
         /// <param name="property">The property</param>
         /// <returns>The string representation of the property</returns>
-        public virtual string Format(TsProperty property, bool indent)
+        public virtual string Format(TsProperty property)
         {
             using (var sbc = new StringBuilderContext(this))
             {
-                if (indent)
-                    this.WriteIndent();
-
                 this.Write("{0}: {1};", Format(property.Name), Format(property.Type));
-
-                if (indent)
-                    this.WriteNewline();
-
                 return sbc.ToString();
             }
         }
-
-        public virtual string Format(TsIndexerProperty property, bool indent)
+        
+        /// <summary>
+        /// Formats an indexer property
+        /// </summary>
+        /// <param name="property">The property</param>
+        /// <returns></returns>
+        public virtual string Format(TsIndexerProperty property)
         {
             using (var sbc = new StringBuilderContext(this))
             {
-                if (indent)
-                    this.WriteIndent();
-
                 this.Write("[{0}: {1}]: {2};", Format(property.Name), Format(property.IndexerType), Format(property.ReturnType));
-
-                if (indent)
-                    this.WriteNewline();
                 return sbc.ToString();
             }
         }
@@ -219,14 +241,12 @@ namespace TypeScripter.TypeScript
         {
             using (var sbc = new StringBuilderContext(this))
             {
-                this.WriteIndent();
                 this.Write("{0}{1}({2}){3};",
                     Format(function.Name),
                     Format(function.TypeParameters),
                     Format(function.Parameters),
                     function.ReturnType == TsPrimitive.Any ? string.Empty : string.Format(": {0}", FormatReturnType(function.ReturnType))
                 );
-                this.WriteNewline();
                 return sbc.ToString();
             }
         }
@@ -250,8 +270,9 @@ namespace TypeScripter.TypeScript
         {
             if (tsType is TsGenericType)
                 return Format((TsGenericType)tsType);
-            if (tsType is TsInlineInterface)
-                return Format((TsInlineInterface)tsType);
+            var tsInterface = tsType as TsInterface;
+            if (tsInterface != null && tsInterface.IsLiteral)
+                return Format(tsInterface);
             return tsType.Name.FullName;
         }
 
@@ -343,22 +364,6 @@ namespace TypeScripter.TypeScript
         public virtual string Format(TsGenericType tsGenericType)
         {
             return string.Format("{0}{1}", tsGenericType.Name.FullName, tsGenericType.TypeArguments.Count > 0 ? string.Format("<{0}>", string.Join(", ", tsGenericType.TypeArguments.Select(Format))) : string.Empty);
-        }
-
-        public virtual string Format(TsInlineInterface tsInterface)
-        {
-            using (var sbc = new StringBuilderContext(this))
-            {
-                this.Write("{");
-                foreach (var property in tsInterface.Properties.OrderBy(x => x.Name))
-                    this.Write(this.Format(property, indent: false));
-
-                foreach (var property in tsInterface.IndexerProperties.OrderBy(x => x.Name))
-                    this.Write(this.Format(property, indent: false));
-
-                this.Write("}");
-                return sbc.ToString();
-            }
         }
 
         /// <summary>

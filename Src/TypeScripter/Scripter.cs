@@ -420,29 +420,14 @@ namespace TypeScripter
                 tsType = new TsGenericType(new TsName(type.Name));
             else if (typeInfo.IsGenericType && !typeInfo.IsGenericTypeDefinition)
             {
-                if (type.GetGenericTypeDefinition() == typeof(Dictionary<,>))
+                var tsGenericTypeDefinition = Resolve(type.GetGenericTypeDefinition());
+                TsGenericType tsGenericType = new TsGenericType(tsGenericTypeDefinition.Name);
+                foreach (var argument in type.GetTypeInfo().GetGenericArguments())
                 {
-                    // find type used for dictionary values
-                    var genericArguments = type.GetTypeInfo().GetGenericArguments();
-                    var keyType = genericArguments[0];
-                    var valueType = genericArguments[1];
-                    var tsKeyType = this.Resolve(keyType);
-                    var tsArgType = this.Resolve(valueType);
-                    var inlineInterfaceType = new TsInlineInterface(new TsName("Dictionary<" + tsKeyType.Name.Name + "," + tsArgType.Name.Name + ">"));
-                    inlineInterfaceType.IndexerProperties.Add(new TsIndexerProperty(new TsName("key"), tsKeyType, tsArgType));
-                    tsType = inlineInterfaceType;
+                    var tsArgType = this.Resolve(argument);
+                    tsGenericType.TypeArguments.Add(tsArgType);
                 }
-                else
-                {
-                    var tsGenericTypeDefinition = Resolve(type.GetGenericTypeDefinition());
-                    TsGenericType tsGenericType = new TsGenericType(tsGenericTypeDefinition.Name);
-                    foreach (var argument in type.GetTypeInfo().GetGenericArguments())
-                    {
-                        var tsArgType = this.Resolve(argument);
-                        tsGenericType.TypeArguments.Add(tsArgType);
-                    }
-                    tsType = tsGenericType;
-                }
+                tsType = tsGenericType;
             }
             else if (type.IsArray && type.HasElementType)
             {
@@ -478,7 +463,24 @@ namespace TypeScripter
         /// <returns></returns>
         protected virtual TsProperty Resolve(PropertyInfo property)
         {
-            return new TsProperty(GetName(property), Resolve(property.PropertyType));
+            TsType propertyType;
+            if (property.PropertyType.IsGenericType && !property.PropertyType.IsGenericTypeDefinition && property.PropertyType.GetGenericTypeDefinition() == typeof(Dictionary<,>))
+            {
+                // find type used for dictionary values
+                var genericArguments = property.PropertyType.GetTypeInfo().GetGenericArguments();
+                var keyType = genericArguments[0];
+                var valueType = genericArguments[1];
+                var tsKeyType = this.Resolve(keyType);
+                var tsArgType = this.Resolve(valueType);
+                var inlineInterfaceType = new TsInterface();
+                inlineInterfaceType.IndexerProperties.Add(new TsIndexerProperty(new TsName("key"), tsKeyType, tsArgType));
+                propertyType = inlineInterfaceType;
+            }
+            else
+            {
+                propertyType = Resolve(property.PropertyType);
+            }
+            return new TsProperty(GetName(property), propertyType);
         }
 
         /// <summary>
