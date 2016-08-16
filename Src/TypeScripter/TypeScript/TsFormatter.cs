@@ -97,6 +97,14 @@ namespace TypeScripter.TypeScript
             get;
             private set;
         }
+
+        /// <summary>
+        /// Enums are represented as strings not as numbers
+        /// </summary>
+        public bool EnumsAsString
+        {
+            get; set;
+        }
         #endregion
 
         #region Creation
@@ -282,6 +290,48 @@ namespace TypeScripter.TypeScript
         /// <param name="tsEnum">The enumeration</param>
         /// <returns>The string representation of the enumeration</returns>
         public virtual string Format(TsEnum tsEnum)
+        {
+            if (this.EnumsAsString)
+            {
+                return this.FormatEnumAsStrings(tsEnum);
+            }
+            else
+            {
+                return this.FormatEnumAsIntegers(tsEnum);
+            }
+        }
+
+        /// <summary>
+        /// Formats an enumeration as string
+        /// </summary>
+        /// <param name="tsEnum">The enumeration</param>
+        /// <returns>The string representation of the enumeration</returns>
+        protected string FormatEnumAsStrings(TsEnum tsEnum)
+        {
+            using (var sbc = new StringBuilderContext(this))
+            {
+                this.WriteIndent();
+                this.Write("type {0} = ", Format(tsEnum.Name));
+                var values = tsEnum.Values.OrderBy(x => x.Key).ToArray();
+                for (int i = 0; i < values.Length; i++)
+                {
+                    var postFix = i < values.Length - 1 ? " | " : string.Empty;
+                    var entry = values[i];
+                    this.Write("\'{0}\'{1}", entry.Key, postFix);
+                }
+                this.Write(";");
+                this.WriteNewline();
+                return sbc.ToString();
+            }
+        }
+
+
+        /// <summary>
+        /// Formats an enumaration as integers
+        /// </summary>
+        /// <param name="tsEnum">The enumeration</param>
+        /// <returns>The string representation of the enumeration</returns>
+        protected string FormatEnumAsIntegers(TsEnum tsEnum)
         {
             using (var sbc = new StringBuilderContext(this))
             {
