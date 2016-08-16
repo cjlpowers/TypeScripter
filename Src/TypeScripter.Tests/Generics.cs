@@ -13,7 +13,7 @@ using TypeScripter.Readers;
 namespace TypeScripter.Tests
 {
     [TestFixture]
-    public class GenericsTest : Test
+    public class Generics : Test
     {
         #region Internal Constructs
         public class GenericClass<T>

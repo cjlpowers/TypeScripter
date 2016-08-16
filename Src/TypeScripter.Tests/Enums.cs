@@ -27,7 +27,7 @@ namespace TypeScripter.Tests
     public class Enums : Test
     {
         [Test]
-        public void OutputTest()
+        public void CanOutputEnums()
         {
             var scripter = new TypeScripter.Scripter();
             var output = scripter

@@ -13,7 +13,7 @@ using TypeScripter.Readers;
 namespace TypeScripter.Tests
 {
     [TestFixture]
-    public class AssemblyTest : Test
+    public class Assemblies : Test
     {
         [Test]
         public void CanOutputTypesFromAssembly()
@@ -27,7 +27,7 @@ namespace TypeScripter.Tests
                     .AddTypes(assemlby)
             );
             output.AppendLine();
-            output.AppendLine("var assemblyTest: TypeScripter.Tests.AssemblyTest;");
+            output.AppendLine("var assemblyTest: TypeScripter.Tests.Assemblies;");
             output.AppendLine("assemblyTest.CanOutputTypesFromAssembly();");
 
             ValidateTypeScript(output);

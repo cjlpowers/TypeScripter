@@ -46,7 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyTest.cs" />
+    <Compile Include="Assemblies.cs" />
     <Compile Include="Dictionaries.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Examples\Ex5.Formatters.cs" />
@@ -55,8 +55,8 @@
     <Compile Include="Examples\Ex2.Inheritance.cs" />
     <Compile Include="Examples\Ex1.BasicUsage.cs" />
     <Compile Include="Fields.cs" />
-    <Compile Include="InheritanceTest.cs" />
-    <Compile Include="GenericsTest.cs" />
+    <Compile Include="Inheritance.cs" />
+    <Compile Include="Generics.cs" />
     <Compile Include="Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TypeScriptCompiler.cs" />

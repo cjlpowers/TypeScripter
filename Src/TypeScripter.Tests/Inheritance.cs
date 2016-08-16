@@ -13,7 +13,7 @@ using TypeScripter.Readers;
 namespace TypeScripter.Tests
 {
     [TestFixture]
-    public class InheritanceTest : Test
+    public class Inheritance : Test
     {
         #region Internal Constructs
         public class Foo

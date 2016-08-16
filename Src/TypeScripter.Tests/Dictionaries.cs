@@ -42,7 +42,7 @@ namespace TypeScripter
     public class Dictionaries : Test
     {
         [Test]
-        public void OutputTest()
+        public void CanOutputDictionaryTypes()
         {
             var scripter = new TypeScripter.Scripter();
             var output = scripter
