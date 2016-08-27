@@ -54,6 +54,7 @@
     <Compile Include="Examples\Ex3.Generics.cs" />
     <Compile Include="Examples\Ex2.Inheritance.cs" />
     <Compile Include="Examples\Ex1.BasicUsage.cs" />
+    <Compile Include="RegisterTypeMapping.cs" />
     <Compile Include="Fields.cs" />
     <Compile Include="Inheritance.cs" />
     <Compile Include="Generics.cs" />
