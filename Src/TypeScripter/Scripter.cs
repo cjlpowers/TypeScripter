@@ -77,6 +77,7 @@ namespace TypeScripter
             };
 
             this.RegisterTypeMapping(CreateGenericDictionaryType(), typeof(Dictionary<,>));
+            this.RegisterTypeMapping(TsPrimitive.Any, typeof(ValueType));
 
             // initialize the scripter with default implementations
             this.Reader = new TypeReader();
