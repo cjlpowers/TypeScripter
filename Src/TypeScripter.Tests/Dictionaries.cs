@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using TypeScripter.Tests;
 
-namespace TypeScripter
+namespace TypeScripter.Tests
 {
     #region Example Constructs
     public class Order
@@ -66,11 +66,11 @@ namespace TypeScripter
             ValidateTypeScript(output);
 
             // inline interfaces for dictionaries are generated
-            Assert.True(output.Contains("LinesByIndex: {[key: number]: TypeScripter.OrderLineItem;}"));
-            Assert.True(output.Contains("OrderLines: {[key: string]: TypeScripter.OrderLineItem;}"));
+            Assert.True(output.Contains("LinesByIndex: {[key: number]: TypeScripter.Tests.OrderLineItem;}"));
+            Assert.True(output.Contains("OrderLines: {[key: string]: TypeScripter.Tests.OrderLineItem;}"));
             Assert.True(output.Contains("SimpleDict1: {[key: string]: string;}"));
             Assert.True(output.Contains("SimpleDict2: {[key: number]: number;}"));
-            Assert.True(output.Contains("SimpleDict3: TypeScripter.OrderDictionary;"));
+            Assert.True(output.Contains("SimpleDict3: TypeScripter.Tests.OrderDictionary;"));
         }
     }
 }
