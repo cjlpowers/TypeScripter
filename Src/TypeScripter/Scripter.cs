@@ -464,11 +464,18 @@ namespace TypeScripter
         protected virtual TsProperty Resolve(PropertyInfo property)
         {
             TsType propertyType;
+            bool optional = false;
             var propertyTypeInfo = property.PropertyType.GetTypeInfo();
-            if (propertyTypeInfo.IsGenericType && !propertyTypeInfo.IsGenericTypeDefinition && propertyTypeInfo.GetGenericTypeDefinition() == typeof(Dictionary<,>))
+            if (propertyTypeInfo.IsGenericType && propertyTypeInfo.GetGenericTypeDefinition() == typeof(Nullable<>))
+            {
+                var genericArguments = propertyTypeInfo.GetGenericArguments();
+                propertyType = this.Resolve(genericArguments[0]);
+                optional = true;
+            }
+            else if (propertyTypeInfo.IsGenericType && !propertyTypeInfo.IsGenericTypeDefinition && propertyTypeInfo.GetGenericTypeDefinition() == typeof(Dictionary<,>))
             {
                 // find type used for dictionary values
-                var genericArguments = property.PropertyType.GetTypeInfo().GetGenericArguments();
+                var genericArguments = propertyTypeInfo.GetGenericArguments();
                 var keyType = genericArguments[0];
                 var valueType = genericArguments[1];
                 var tsKeyType = this.Resolve(keyType);
@@ -481,7 +488,7 @@ namespace TypeScripter
             {
                 propertyType = Resolve(property.PropertyType);
             }
-            return new TsProperty(GetName(property), propertyType);
+            return new TsProperty(GetName(property), propertyType, optional);
         }
 
         /// <summary>

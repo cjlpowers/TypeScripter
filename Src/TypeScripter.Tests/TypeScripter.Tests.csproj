@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Assemblies.cs" />
     <Compile Include="Dictionaries.cs" />
+    <Compile Include="NullableTypes.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Examples\Ex5.Formatters.cs" />
     <Compile Include="Examples\Ex4.TypeReaders.cs" />

@@ -221,7 +221,7 @@ namespace TypeScripter.TypeScript
         {
             using (var sbc = new StringBuilderContext(this))
             {
-                this.Write("{0}: {1};", Format(property.Name), Format(property.Type));
+                this.Write("{0}{1}: {2};", Format(property.Name), property.Optional?"?":"", Format(property.Type));
                 return sbc.ToString();
             }
         }
