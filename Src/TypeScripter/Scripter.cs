@@ -148,6 +148,22 @@ namespace TypeScripter
         }
 
         /// <summary>
+        /// Registers custom type mapping
+        /// </summary>
+        /// <param name="tsType">The TypeScript type</param>
+        /// <param name="type">The native type</param>
+        /// <returns></returns>
+        public Scripter WithTypeMapping(TsType tsType, Type type)
+        {
+            if (this.TypeLookup.ContainsKey(type))
+            {
+                throw new ArgumentException("Mapping for " + type.FullName + " is already defined.", "type");
+            }
+            this.TypeLookup[type] = tsType;
+            return this;
+        }
+
+        /// <summary>
         /// Adds a particular type to be scripted
         /// </summary>
         /// <param name="type">The type</param>
