@@ -37,11 +37,12 @@ namespace TypeScripter.TypeScript
         /// </summary>
         /// <param name="name">The interface name</param>
         /// <param name="type">The type name</param>
-        public TsProperty(TsName name, TsType type)
+        /// <param name="optional">Indicates optional property</param>
+        public TsProperty(TsName name, TsType type, bool optional = false)
             : base(name)
         {
             this.Type = type;
-            this.Optional = false;
+            this.Optional = optional;
         }
         #endregion
     }
