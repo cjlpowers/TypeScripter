@@ -9,6 +9,8 @@ namespace TypeScripter.Tests
     {
         public Enum1? Property1 { get; set; }
         public int? IntProperty { get; set; }
+
+        public long? LongField; // no get/set here
     }
 
     public enum Enum1
@@ -43,6 +45,7 @@ namespace TypeScripter.Tests
 
             Assert.True(output.Contains("const enum Enum1"), "Underlaying enum should be resolved");
             Assert.True(output.Contains("IntProperty?: number"));
+            Assert.True(output.Contains("LongField?: number"));
             Assert.True(output.Contains("Property1?: TypeScripter.Tests.Enum1"));
         }
 
