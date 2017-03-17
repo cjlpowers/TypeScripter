@@ -470,7 +470,22 @@ namespace TypeScripter
         /// <returns></returns>
         protected virtual TsProperty Resolve(FieldInfo field)
         {
-            return new TsProperty(GetName(field), Resolve(field.FieldType));
+            TsType propertyType;
+            bool optional = false;
+            var fieldTypeInfo = field.FieldType.GetTypeInfo();
+            if (fieldTypeInfo.IsGenericType && fieldTypeInfo.GetGenericTypeDefinition() == typeof(Nullable<>))
+            {
+                var genericArguments = fieldTypeInfo.GetGenericArguments();
+                propertyType = this.Resolve(genericArguments[0]);
+                optional = true;
+            }
+            else
+            {
+                propertyType = Resolve(field.FieldType);
+            }
+
+
+            return new TsProperty(GetName(field), propertyType, optional);
         }
 
         /// <summary>
