@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -102,6 +103,14 @@ namespace TypeScripter.TypeScript
         /// Enums are represented as strings not as numbers
         /// </summary>
         public bool EnumsAsString
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Use lower camel case for properties
+        /// </summary>
+        public bool LowerCamelCaseProperties
         {
             get; set;
         }
@@ -221,11 +230,16 @@ namespace TypeScripter.TypeScript
         {
             using (var sbc = new StringBuilderContext(this))
             {
-                this.Write("{0}{1}: {2};", Format(property.Name), property.Optional?"?":"", Format(property.Type));
-                return sbc.ToString();
+                this.Write("{0}{1}: {2};", Format(property.Name), property.Optional ? "?" : "", Format(property.Type));
+                var result = sbc.ToString();
+                if (!LowerCamelCaseProperties)
+                {
+                    return result;
+                }
+                return char.ToLower(result[0]) + (result.Length == 1 ? String.Empty : result.Substring(1));
             }
         }
-        
+
         /// <summary>
         /// Formats an indexer property
         /// </summary>
