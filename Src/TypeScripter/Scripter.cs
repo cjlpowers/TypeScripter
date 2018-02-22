@@ -93,7 +93,7 @@ namespace TypeScripter
         public override string ToString()
         {
             var str = new StringBuilder();
-            foreach (var module in this.Modules())
+            foreach (var module in this.Modules().OrderBy(x=>x.Name))
                 str.Append(this.Formatter.Format(module));
             return str.ToString();
         }
