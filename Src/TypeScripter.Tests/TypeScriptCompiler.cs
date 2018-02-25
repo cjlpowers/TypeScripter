@@ -68,11 +68,7 @@ namespace TypeScripter.Tests
         {
             var options = "";
             var process = new Process();
-#if DOTNET
-            process.StartInfo.FileName = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), @"..\..\", @"Tools\Microsoft.TypeScript.Compiler\tsc.exe");
-#else
             process.StartInfo.FileName = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), @"..\..\..\..\..\", @"Tools\Microsoft.TypeScript.Compiler\tsc.exe");
-#endif
             process.StartInfo.Arguments = string.Format("{0} {1}", options, string.Join(" ", files));
             process.StartInfo.CreateNoWindow = true;
             process.StartInfo.UseShellExecute = false;

@@ -1,81 +1,32 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{23816576-843A-4424-B502-8546A1D4EF62}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TypeScripter</RootNamespace>
+    <Description>TypeScripter is a .NET class library used to generate TypeScript definitions for .NET types.</Description>
+    <AssemblyTitle>TypeScripter</AssemblyTitle>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <VersionPrefix>0.5.3</VersionPrefix>
+    <Authors>Chris Powers</Authors>
+    <TargetFramework>netstandard1.5</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyName>TypeScripter</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <PackageId>TypeScripter</PackageId>
+    <PackageTags>TypeScript;Definitions</PackageTags>
+    <PackageProjectUrl>http://cjlpowers.github.io/TypeScripter</PackageProjectUrl>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/cjlpowers/TypeScripter/master/LICENSE</PackageLicenseUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>git://github.com/cjlpowers/TypeScripter</RepositoryUrl>
+    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
+    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
+    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageReleaseNotes>- Render 'Nullable' type as optional property.
+      - Render 'System.ValueType' as 'any'.
+      - Added 'WithTypeMapping' method to 'Scripter' to support custom type mappings.</PackageReleaseNotes>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\net45\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NETCLR</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\net45\TypeScripter.XML</DocumentationFile>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\net45\</OutputPath>
-    <DefineConstants>TRACE;NETCLR</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <DocumentationFile>bin\Release\net45\TypeScripter.XML</DocumentationFile>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Readers\CompositeTypeReader.cs" />
-    <Compile Include="Readers\TypeReader.cs" />
-    <Compile Include="Readers\ServiceContractTypeReader.cs" />
-    <Compile Include="Readers\DataContractTypeReader.cs" />
-    <Compile Include="Scripter.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TypeScript\TsGenericType.cs" />
-    <Compile Include="TypeScript\TsFunction.cs" />
-    <Compile Include="TypeScript\TsIndexerProperty.cs" />
-    <Compile Include="TypeScript\TsTypeParameter.cs" />
-    <Compile Include="TypeScript\TsParameter.cs" />
-    <Compile Include="TypeScript\TsName.cs" />
-    <Compile Include="TypeScript\TsFormatter.cs" />
-    <Compile Include="TypeScript\TsProperty.cs" />
-    <Compile Include="TypeScript\TsInterface.cs" />
-    <Compile Include="TypeScript\TsEnum.cs" />
-    <Compile Include="TypeScript\TsPrimitive.cs" />
-    <Compile Include="TypeScript\TsArray.cs" />
-    <Compile Include="TypeScript\TsObject.cs" />
-    <Compile Include="TypeScript\TsModule.cs" />
-    <Compile Include="TypeScript\TsType.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="TypeScripter.project.json" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+  
 </Project>

@@ -1,16 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TypeScripter", "TypeScripter\TypeScripter.csproj", "{23816576-843A-4424-B502-8546A1D4EF62}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D4ED2A05-941B-4114-8F1E-F4405EB26576}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TypeScripter.Tests", "TypeScripter.Tests\TypeScripter.Tests.csproj", "{EAA005D3-AADA-49E1-B45E-A7F99EA80DBB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TypeScripter", "TypeScripter\TypeScripter.csproj", "{5F364CBA-F6E9-4C37-BE00-DE157210AC65}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{53C7DF6C-53E9-444E-8CEF-D80950412C76}"
-	ProjectSection(SolutionItems) = preProject
-		..\Build\TypeScripter.nuspec = ..\Build\TypeScripter.nuspec
-	EndProjectSection
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TypeScripter.Tests", "TypeScripter.Tests\TypeScripter.Tests.csproj", "{D1364783-1934-4139-B8E8-DC916F510246}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,16 +15,19 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{23816576-843A-4424-B502-8546A1D4EF62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{23816576-843A-4424-B502-8546A1D4EF62}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{23816576-843A-4424-B502-8546A1D4EF62}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{23816576-843A-4424-B502-8546A1D4EF62}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EAA005D3-AADA-49E1-B45E-A7F99EA80DBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EAA005D3-AADA-49E1-B45E-A7F99EA80DBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EAA005D3-AADA-49E1-B45E-A7F99EA80DBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EAA005D3-AADA-49E1-B45E-A7F99EA80DBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F364CBA-F6E9-4C37-BE00-DE157210AC65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F364CBA-F6E9-4C37-BE00-DE157210AC65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F364CBA-F6E9-4C37-BE00-DE157210AC65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F364CBA-F6E9-4C37-BE00-DE157210AC65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1364783-1934-4139-B8E8-DC916F510246}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1364783-1934-4139-B8E8-DC916F510246}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1364783-1934-4139-B8E8-DC916F510246}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1364783-1934-4139-B8E8-DC916F510246}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EE07F0D6-8F88-4F69-897B-2349E13A5066}
 	EndGlobalSection
 EndGlobal
