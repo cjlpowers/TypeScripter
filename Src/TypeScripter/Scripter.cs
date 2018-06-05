@@ -435,6 +435,11 @@ namespace TypeScripter
                 tsType = TsPrimitive.Any;
             else if (type.IsGenericParameter)
                 tsType = new TsGenericType(new TsName(type.Name));
+            else if (typeInfo.ImplementedInterfaces.Contains(typeof(IEnumerable)) && typeInfo.IsGenericType && !typeInfo.IsGenericTypeDefinition)
+            {
+                var elementType = this.Resolve(typeInfo.GetGenericArguments()[0]);
+                tsType = new TsArray(elementType, 1);
+            }
             else if (typeInfo.IsGenericType && !typeInfo.IsGenericTypeDefinition)
             {
                 var tsGenericTypeDefinition = Resolve(type.GetGenericTypeDefinition());
