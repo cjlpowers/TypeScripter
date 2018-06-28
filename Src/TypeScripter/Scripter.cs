@@ -265,6 +265,15 @@ namespace TypeScripter
             this.TypeFilter = filter;
             return this;
         }
+
+        /// <summary>
+        /// Use lower camel case for properties
+        /// </summary>
+        public Scripter LowerCamelCaseProperties()
+        {
+            this.Formatter.LowerCamelCaseProperties = true;
+            return this;
+        }
         #endregion
 
         #region Type Generation
